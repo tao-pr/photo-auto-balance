@@ -4,6 +4,8 @@ Image filters
 @author TaoPR (github.com/starcolon)
 """
 
+import numpy as np
+
 FILTERS = [] # TAOTODO: List all predefined filters here
 
 # Apply multiple filters at once 
@@ -21,6 +23,14 @@ def filter(brightness_scale,level_a,level_c,hue_deg,sat_scale):
 
 # Generate random filters
 def random_filters(max_product_count):
+  def rand_f():
+    brightness_scale = np.random.normal(1,0.3)
+    level_a   = np.random.normal(0,0.25)
+    level_c   = np.random.normal(0,0.3)
+    hue_deg   = np.random.normal(0,30)
+    sat_scale = np.random.normal(1,0.25)
+    return filter(brightness_scale,level_a,level_c,hue_deg,sat_scale)
+
   f = [rand_f() for i in range(max_product_count)]
   return f
 
@@ -37,7 +47,7 @@ def brightness(scale):
 
 # Adjust image level, such that
 # I' = a*I + c
-def level(a,c):
+def level(a,b,c):
   def f(img):
     return img.point(lambda x: x*a+c)
   return f
