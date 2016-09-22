@@ -45,6 +45,19 @@ def brightness(scale):
     return Image.merge('HSV',[h,s,v])
   return f
 
+# Gamma transformation of an image such that
+# I' = MAX * (I/255)^r
+def gamma(r):
+  g = lambda x: 255.0*(x/255.0)**r
+  def f(img):
+    if img.mode != 'RGB':
+      return img.point(g)
+    else: # Presumably only HSV
+      h,s,v = img.split()
+      v     = v.point(g)
+      return Image.merge('HSV',[h,s,v])
+  return f
+
 # Adjust image level, such that
 # I' = a*I + c
 def level(a,b,c):
