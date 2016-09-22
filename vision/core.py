@@ -19,6 +19,9 @@ def generate_filtered(sample,max_combination=5):
 def load_img(path):
   return Image.open(path)
 
+def inverse_trans(v):
+  return inverse(v)
+
 # Apply a sample image with a transformation filter
 def apply_filter(v,inverse=False):
   def to(sample):

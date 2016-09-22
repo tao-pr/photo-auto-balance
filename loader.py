@@ -30,36 +30,44 @@ args = vars(arguments.parse_args(sys.argv[1:]))
 def train(samples):
   trainset = []
   n = 0 # Number of input samples
-  for s in samples:
-    print(colored('Processing ... ','cyan'), s)
-    src = load_img(args['dir'] + '/' + s)
-    
-    # Apply generated filters
-    transformations,filtered = generate_filtered(src,args['permutation'])
-    print('    {} filters applied'.format(\
-      colored(len(filtered),'green')))
+  sample_text_file = '{0}/../trainset.csv'.format(args['dir'])
+  with open(sample_text_file,'w+') as sf:
+    for s in samples:
+      n += 1
+      print(colored('Processing ... ','cyan'), s)
+      src     = load_img(args['dir'] + '/' + s)
+      dir_out = args['dir'] + '../out'
+      
+      # Apply generated filters
+      transformations,filtered = generate_filtered(src,args['permutation'])
+      print('    {} filters applied'.format(\
+        colored(len(filtered),'green')))
 
-    # TAODEBUG: Save transformed images
-    if args['debug']:
+      # Save generated filtered images
       print(colored('     Saving outputs','yellow'))
-      dir_out  = args['dir'] + '../out'
-      dir_out2 = args['dir'] + '../unfiltered'
       for i in range(len(filtered)):
         name = s.split('.')[0]
         # Save filtered images
         filtered[i]\
           .convert('RGB')\
           .save('{0}/{1}-{2:02d}.jpg'.format(dir_out,name,i))
-        # Save invert-filtered images
-        unfiltered = apply_filter(transformations[i],inverse=True)(filtered[i])
-        unfiltered\
-          .convert('RGB')\
-          .save('{0}/{1}-{2:02d}.jpg'.format(dir_out2,name,i))
 
-    # Aggregate training set
-    # TAOTODO: Make this a streamable generator?
-    n += 1
-    trainset.append((src, filtered))
+        # Save the trainset with following fields
+        # filename | # | inverse transformation vector
+        inv_trans_vec = ','.join([str(k) for k in inverse_trans(transformations[i])])
+        sf.write("{0},{1},{2}\n".format(s,i,inv_trans_vec))
+  
+
+      # TAODEBUG: Save invert-filtered images
+      if args['debug']: 
+        dir_out2 = args['dir'] + '../unfiltered'
+        for i in range(len(filtered)):
+          name = s.split('.')[0]
+          unfiltered = apply_filter(transformations[i],inverse=True)(filtered[i])
+          unfiltered\
+            .convert('RGB')\
+            .save('{0}/{1}-{2:02d}.jpg'.format(dir_out2,name,i))
+    
 
   # Pass the trainset through the training process
   if n>0:
