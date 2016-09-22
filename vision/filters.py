@@ -42,10 +42,10 @@ def inverse(v):
 # as a list of transformation vectors
 def random_filters(max_product_count):
   def rand_f():
-    brightness_scale = np.random.normal(1,0.6)
-    r                = np.random.normal(1,0.25)
-    hue_deg          = np.random.normal(0,42)
-    sat_scale        = np.random.normal(1,0.35)
+    brightness_scale = np.random.normal(1,0.6) | 1
+    r                = np.random.normal(1,0.25) | 1
+    hue_deg          = np.random.normal(0,30)
+    sat_scale        = np.random.normal(1,0.25) | 1
     return [brightness_scale,r,hue_deg,sat_scale]
 
   f = [rand_f() for i in range(max_product_count)]
@@ -65,6 +65,7 @@ def brightness(scale):
 # Gamma transformation of an image such that
 # I' = MAX * (I/255)^r
 def gamma(r):
+  # TAONOTE: Following suffers from ZeroDivisionError: 0.0 cannot be raised to a negative power
   g = lambda x: 255.0*(x/255.0)**r
   def f(img):
     if img.mode != 'RGB':

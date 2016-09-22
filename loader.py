@@ -21,6 +21,7 @@ from model.core import *
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument('--debug', dest='debug', action='store_true')
+arguments.add_argument('--limit', type=int, default=None) # Limit the number of samples to process
 arguments.add_argument('--dir', type=str, default='./data/raw/') # Where to pick the samples
 arguments.add_argument('--train', dest='train', action='store_true') # Training mode
 arguments.add_argument('--permutation', type=int, default=8) # Number of filters to apply
@@ -70,6 +71,10 @@ def train(samples):
             .convert('RGB')\
             .save('{0}/{1}-{2:02d}.jpg'.format(dir_out2,name,i))
     
+
+      if args['limit'] and n>=args['limit']:
+        print(colored('LIMIT REACHED','yellow'))
+        break
 
   # Pass the trainset through the training process
   if n>0:
