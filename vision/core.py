@@ -5,18 +5,22 @@ Core module for computer visionary stuffs
 """
 
 import numpy as np
-from PIL import *
-from . import filters
+from PIL import Image
+from .filters import *
+#from . import filters
 
 def generate_filtered(sample,max_combination=5):
-  raise NotImplementedError
+  # Make transformation functions
+  ts = random_filters(max_combination)
+  # Apply generated transformations
+  results = [transform(t)(sample) for t in ts]
+  return ts, results
 
 def load_img(path):
-  return array(Image.open(path)).convert('L')
+  return Image.open(path)
 
-def identical_filter(i):
-  raise NotImplementedError
-
-# I' = I * f + c
-def apply_filter(sample,f,c):
-  raise NotImplementedError
+# Apply a sample image with a transformation filter
+def apply_filter(v,inverse=False):
+  def to(sample):
+    return transform(v,inverse)(sample)
+  return to
