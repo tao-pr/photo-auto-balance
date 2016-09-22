@@ -15,7 +15,7 @@ def transform(v,inversed=False):
   brightness_scale,r,hue_deg,sat_scale = v \
     if not inversed \
     else inverse(v)
-      
+
   def f(img):
     hsv  = img if img.mode=='HSV' else img.convert('HSV')
     hsv_ = hsv if brightness_scale == 1 else brightness(brightness_scale)(hsv)
@@ -42,10 +42,10 @@ def inverse(v):
 # as a list of transformation vectors
 def random_filters(max_product_count):
   def rand_f():
-    brightness_scale = np.random.normal(1,0.3)
+    brightness_scale = np.random.normal(1,0.6)
     r                = np.random.normal(1,0.25)
-    hue_deg          = np.random.normal(0,30)
-    sat_scale        = np.random.normal(1,0.25)
+    hue_deg          = np.random.normal(0,42)
+    sat_scale        = np.random.normal(1,0.35)
     return [brightness_scale,r,hue_deg,sat_scale]
 
   f = [rand_f() for i in range(max_product_count)]

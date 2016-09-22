@@ -23,7 +23,7 @@ arguments = argparse.ArgumentParser()
 arguments.add_argument('--debug', dest='debug', action='store_true')
 arguments.add_argument('--dir', type=str, default='./data/raw/') # Where to pick the samples
 arguments.add_argument('--train', dest='train', action='store_true') # Training mode
-arguments.add_argument('--permutation', type=int, default=5) # Number of filters to apply
+arguments.add_argument('--permutation', type=int, default=8) # Number of filters to apply
 arguments.add_argument('--validate', dest='validate', action='store_true') # Validation mode
 args = vars(arguments.parse_args(sys.argv[1:]))
 
@@ -31,6 +31,8 @@ def train(samples):
   trainset = []
   n = 0 # Number of input samples
   sample_text_file = '{0}/../trainset.csv'.format(args['dir'])
+  
+  # Generate trainset samples from the given input dir
   with open(sample_text_file,'w+') as sf:
     for s in samples:
       n += 1
