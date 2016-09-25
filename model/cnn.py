@@ -33,14 +33,18 @@ class CNN():
       )
 
     # Adjust parameters
-    self.add_loss('mae', weight=0.1)
+    self.add_loss('xe', weight=0.1) # Cross-entropy loss
 
 
   def train(self,trainset,validationset):
-    self.net.train(\
-      trainset, validationset,\
-      algo='rmsprop',\
-      hidden_l1=0.01 )
+    # self.net.train(
+    #   trainset, validationset,
+    #   algo='rmsprop',
+    #   learning_rate=0.01 )
+    n = 0
+    for train,valid in self.net.itertrain(trainset, validationset, **kwargs):
+      print('...Training iter #{0}, loss = {1:.2f}'.format(n, train['loss']))
+      n += 1
 
   def predict(self,candidate):
     return self.net.predict(candidate)

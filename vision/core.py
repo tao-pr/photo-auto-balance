@@ -19,6 +19,14 @@ def generate_filtered(sample,max_combination=5):
 def load_img(path):
   return Image.open(path)
 
+def load_as_feature(path):
+  d   = min(img.size)
+  img = img.crop((0,0,d,d)) # Make it square
+  img = img.resize((128,128)) # Unify the dimension
+  img = img if img.mode=='HSV' else img.convert('HSV')
+  v   = np.array(img.getdata) # NOTE: Huge computation
+  return np.reshape(v.size) # Make it 1D vector
+
 def inverse_trans(v):
   return inverse(v)
 

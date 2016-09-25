@@ -13,6 +13,7 @@ USAGE:
 import os
 import sys
 import argparse
+import numpy as np
 from itertools import tee
 from termcolor import colored
 from pprint import pprint
@@ -24,6 +25,7 @@ arguments.add_argument('--debug', dest='debug', action='store_true')
 arguments.add_argument('--limit', type=int, default=None) # Limit the number of samples to process
 arguments.add_argument('--dir', type=str, default='./data/raw/') # Where to pick the samples
 arguments.add_argument('--train', dest='train', action='store_true') # Training mode
+arguments.add_argument('--ratio', type=float, default=0.8) # Ratio of the training set for cross validation
 arguments.add_argument('--permutation', type=int, default=8) # Number of filters to apply
 arguments.add_argument('--validate', dest='validate', action='store_true') # Validation mode
 args = vars(arguments.parse_args(sys.argv[1:]))
@@ -34,6 +36,7 @@ def train(samples):
   sample_text_file = '{0}/../trainset.csv'.format(args['dir'])
   
   # Generate trainset samples from the given input dir
+  # TAOTODO: Allow skipping this step
   with open(sample_text_file,'w+') as sf:
     for s in samples:
       n += 1
@@ -76,16 +79,38 @@ def train(samples):
         print(colored('LIMIT REACHED','yellow'))
         break
 
-  # Pass the trainset through the training process
+  # Read through the training set from text file 
+  # and pass them through the training process
   if n>0:
     print(colored('Training started ...','magenta'))
-    lm = train_model(trainset)
-    # TAOTODO: Report the training results
-
+    with open(sample_text_file,'r') as f:
+      tl = f.readlines()
+      tl = np.random.shuffle(tl)
+      # Split into trainset and validation set
+      print('...{0} samples to go'.format(len(tl)))
+      d = round(args['ratio']*len(tl))
+      print('...{0} for training'.format(d))
+      print('...{0} for validation'.format(len(tl)-d))
+      
+      print('...Reading samples')
+      trainset = (read_input(l) for l in tl[d:])
+      validset = (read_input(l) for l in tl[:d])
+      dim_feature        = 0 # TAOTODO:
+      dim_transformation = len(tl[0][2:])
+      cnn = train_model((trainset,validset), dim_feature, dim_transformation)
 
   else:
     print(colored('No samples in the given directory.','yellow'))
     print(colored('Ending the job now...','yellow'))
+
+# Read an input training sample into a tuple of feature and target vector
+def read_input(line):
+  t = line.split(',')
+  f = t[0]
+  i = int(t[1])
+  v = t[2:]
+  filename = '{0}/{1}-{2:02d}.jpg'.format(args['dir'], f, i)
+  return load_as_feature(filename), v
 
 def validate(samples):
   raise NotImplementedError
