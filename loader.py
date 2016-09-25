@@ -31,12 +31,11 @@ arguments.add_argument('--validate', dest='validate', action='store_true') # Val
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 def train(samples):
-  trainset = []
-  n = 0 # Number of input samples
+  fullset = []
   sample_text_file = '{0}/../trainset.csv'.format(args['dir'])
   
   # Generate trainset samples from the given input dir
-  # TAOTODO: Allow skipping this step
+  n = 0
   with open(sample_text_file,'w+') as sf:
     for s in samples:
       n += 1
@@ -62,6 +61,7 @@ def train(samples):
         # filename | # | inverse transformation vector
         inv_trans_vec = ','.join([str(k) for k in inverse_trans(transformations[i])])
         sf.write("{0},{1},{2}\n".format(s,i,inv_trans_vec))
+        fullset.append((img_to_feature(filtered[i]),inv_trans_vec))
   
 
       # TAODEBUG: Save invert-filtered images
@@ -79,25 +79,23 @@ def train(samples):
         print(colored('LIMIT REACHED','yellow'))
         break
 
-  # Read through the training set from text file 
-  # and pass them through the training process
-  if n>0:
+  # Process the prepared trainset
+  if len(fullset)>0:
     print(colored('Training started ...','magenta'))
-    with open(sample_text_file,'r') as f:
-      tl = f.readlines()
-      np.random.shuffle(tl)
-      # Split into trainset and validation set
-      print('...{0} samples to go'.format(len(tl)))
-      d = round(args['ratio']*len(tl))
-      print('...{0} for training'.format(d))
-      print('...{0} for validation'.format(len(tl)-d))
-      
-      print('...Reading samples')
-      trainset = (read_input(l) for l in tl[d:])
-      validset = (read_input(l) for l in tl[:d])
-      dim_feature        = 3*get_sample_dim()**2
-      dim_transformation = len(tl[0][2:])
-      cnn = train_model((trainset,validset), dim_feature, dim_transformation)
+    np.random.shuffle(fullset)
+    # Split into actual trainset and validation set
+    print('...{0} raw images processed'.format(n))
+    print('...{0} samples to go'.format(len(fullset)))
+    d = round(args['ratio']*len(fullset))
+    print('...{0} for training'.format(d))
+    print('...{0} for validation'.format(len(fullset)-d))
+    
+    print('...Reading samples')
+    trainset = (read_input(l) for l in fullset[d:])
+    validset = (read_input(l) for l in fullset[:d])
+    dim_feature        = 3*get_sample_dim()**2 # dimension of input vector
+    dim_transformation = len(fullset[0][1]) # dimension of final transformation vector
+    cnn = train_model((trainset,validset), dim_feature, dim_transformation)
 
   else:
     print(colored('No samples in the given directory.','yellow'))

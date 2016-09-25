@@ -9,8 +9,8 @@ from PIL import Image
 from .filters import *
 #from . import filters
 
-def get_sample_dim():
-  return 128
+def get_sample_dim(): # n
+  return 64 # total vector dimensionality : n^5
 
 def generate_filtered(sample,max_combination=5):
   # Make transformation functions
@@ -22,13 +22,13 @@ def generate_filtered(sample,max_combination=5):
 def load_img(path):
   return Image.open(path)
 
-def load_as_feature(path):
+def img_to_feature(img):
   d   = min(img.size)
   img = img.crop((0,0,d,d)) # Make it square
   img = img.resize((get_sample_dim(),get_sample_dim())) # Unify the dimension
   img = img if img.mode=='HSV' else img.convert('HSV')
   v   = np.array(img.getdata) # NOTE: Huge computation
-  return np.reshape(v.size) # Make it 1D vector
+  return np.reshape(v,v.size) # Roll into 1D vector
 
 def inverse_trans(v):
   return inverse(v)
