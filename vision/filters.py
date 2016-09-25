@@ -42,10 +42,11 @@ def inverse(v):
 # as a list of transformation vectors
 def random_filters(max_product_count):
   def rand_f():
-    brightness_scale = np.random.normal(1,0.6) | 1
-    r                = np.random.normal(1,0.25) | 1
+    brightness_scale = np.random.normal(1,0.6)
+    r                = abs(np.random.normal(0.7,0.5))
     hue_deg          = np.random.normal(0,30)
-    sat_scale        = np.random.normal(1,0.25) | 1
+    sat_scale        = np.random.normal(1,0.25)
+
     return [brightness_scale,r,hue_deg,sat_scale]
 
   f = [rand_f() for i in range(max_product_count)]

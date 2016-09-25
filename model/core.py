@@ -6,7 +6,7 @@ Model training and utilisation
 
 from .cnn import CNN
 from termcolor import colored
-from pickle import pickle
+import pickle
 import numpy as np
 
 """

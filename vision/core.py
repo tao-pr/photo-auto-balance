@@ -9,6 +9,9 @@ from PIL import Image
 from .filters import *
 #from . import filters
 
+def get_sample_dim():
+  return 128
+
 def generate_filtered(sample,max_combination=5):
   # Make transformation functions
   ts = random_filters(max_combination)
@@ -22,7 +25,7 @@ def load_img(path):
 def load_as_feature(path):
   d   = min(img.size)
   img = img.crop((0,0,d,d)) # Make it square
-  img = img.resize((128,128)) # Unify the dimension
+  img = img.resize((get_sample_dim(),get_sample_dim())) # Unify the dimension
   img = img if img.mode=='HSV' else img.convert('HSV')
   v   = np.array(img.getdata) # NOTE: Huge computation
   return np.reshape(v.size) # Make it 1D vector

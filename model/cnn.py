@@ -15,20 +15,18 @@ from . import *
 class CNN():
 
   """
-  @param {(Int,Int)} dimension of images
+  @param {int} dimension of feature vector
   """
-  def __init__(self, image_dim, final_vec_dim)
+  def __init__(self, image_dim, final_vec_dim):
 
-    w,h = image_dim
-
-    l1 = C.Conv1(w*h)         # Photo scanner
-    l2 = C.Conv1(round(l1/2)) # Shape downsampling
-    l3 = C.Conv1(l2-2)        # Encoder
+    l1 = C.Conv1(size=image_dim)         # Photo scanner
+    l2 = C.Conv1(size=round(l1/2)) # Shape downsampling
+    l3 = C.Conv1(size=l2-2)        # Encoder
     l4 = (round(l3/2), 'sigmoid') # Final feature mapper
     l5 = (final_vec_dim, 'linear') # Classifiers
 
     # Create a NN structure
-    self.net = N.regressor(\
+    self.net = N.Autoencoder(\
       layers=[l1, l2, l3, l4, l5]\
       )
 

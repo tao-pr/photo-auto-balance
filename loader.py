@@ -85,7 +85,7 @@ def train(samples):
     print(colored('Training started ...','magenta'))
     with open(sample_text_file,'r') as f:
       tl = f.readlines()
-      tl = np.random.shuffle(tl)
+      np.random.shuffle(tl)
       # Split into trainset and validation set
       print('...{0} samples to go'.format(len(tl)))
       d = round(args['ratio']*len(tl))
@@ -95,7 +95,7 @@ def train(samples):
       print('...Reading samples')
       trainset = (read_input(l) for l in tl[d:])
       validset = (read_input(l) for l in tl[:d])
-      dim_feature        = 0 # TAOTODO:
+      dim_feature        = 3*get_sample_dim()**2
       dim_transformation = len(tl[0][2:])
       cnn = train_model((trainset,validset), dim_feature, dim_transformation)
 
