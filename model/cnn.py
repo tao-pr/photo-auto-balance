@@ -8,7 +8,7 @@ from theano import *
 from theano import tensor as T
 from scipy import *
 import theanets as N
-import theanets.layers.convolution as C
+import theanets.layers.convolution as Cvl
 import numpy as np
 from . import *
 
@@ -19,15 +19,19 @@ class CNN():
   """
   def __init__(self, image_dim, final_vec_dim):
 
-    l1 = C.Conv1(size=image_dim)         # Photo scanner
-    l2 = C.Conv1(size=round(l1/2)) # Shape downsampling
-    l3 = C.Conv1(size=l2-2)        # Encoder
-    l4 = (round(l3/2), 'sigmoid') # Final feature mapper
-    l5 = (final_vec_dim, 'linear') # Classifiers
+    n1 = round(image_dim/3)
+    n2 = round(n1/2)
+    n3 = round(n2/16)
+    n4 = final_vec_dim
+
+    l1 = Cvl.Conv1(n1,size=n1,inputs=image_dim)  # Pixel-shape scanner
+    l2 = Cvl.Conv1(n2,size=n2,inputs=n1)  # Shape encoder
+    l3 = Cvl.Conv1(n3,size=n3,inputs=n2)  # Final feature mapper
+    l4 = (n4, 'linear')                   # Classifiers
 
     # Create a NN structure
     self.net = N.Autoencoder(\
-      layers=[l1, l2, l3, l4, l5]\
+      layers=[l1, l2, l3, l4]\
       )
 
     # Adjust parameters
