@@ -21,11 +21,11 @@ class CNN():
 
     w,h = image_dim
 
-    l1 = C.Conv1(w*h)
-    l2 = C.Conv1(round(l1/2))
-    l3 = C.Conv1(l2-2)
-    l4 = (round(l1/2), 'sigmoid')
-    l5 = (final_vec_dim, 'linear')
+    l1 = C.Conv1(w*h)         # Photo scanner
+    l2 = C.Conv1(round(l1/2)) # Shape downsampling
+    l3 = C.Conv1(l2-2)        # Encoder
+    l4 = (round(l3/2), 'sigmoid') # Final feature mapper
+    l5 = (final_vec_dim, 'linear') # Classifiers
 
     # Create a NN structure
     self.net = N.regressor(\
