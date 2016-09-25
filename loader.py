@@ -61,7 +61,7 @@ def train(samples):
         # filename | # | inverse transformation vector
         inv_trans_vec = ','.join([str(k) for k in inverse_trans(transformations[i])])
         sf.write("{0},{1},{2}\n".format(s,i,inv_trans_vec))
-        fullset.append((img_to_feature(filtered[i]),inv_trans_vec))
+        fullset.append({'x':img_to_feature(filtered[i]), 'y':inv_trans_vec})
   
 
       # TAODEBUG: Save invert-filtered images
@@ -89,26 +89,26 @@ def train(samples):
     d = round(args['ratio']*len(fullset))
     print('...{0} for training'.format(d))
     print('...{0} for validation'.format(len(fullset)-d))
-    
+
+    # TAODEBUG:
+    print(fullset[0])
+      
     print('...Reading samples')
-    trainset = (read_input(l) for l in fullset[d:])
-    validset = (read_input(l) for l in fullset[:d])
-    dim_feature        = 3*get_sample_dim()**2 # dimension of input vector
-    dim_transformation = len(fullset[0][1]) # dimension of final transformation vector
+    trainsetX = (l['x'] for l in fullset[d:])
+    validsetX = (l['x'] for l in fullset[:d])
+    trainsetY = (l['y'] for l in fullset[d:])
+    validsetY = (l['y'] for l in fullset[:d])
+
+    trainset = (trainsetX, trainsetY)
+    validset = (validsetX, validsetY)
+
+    dim_feature        = len(fullset[0]['x']) # dimension of input vector
+    dim_transformation = len(fullset[0]['y']) # dimension of final transformation vector
     cnn = train_model((trainset,validset), dim_feature, dim_transformation)
 
   else:
     print(colored('No samples in the given directory.','yellow'))
     print(colored('Ending the job now...','yellow'))
-
-# Read an input training sample into a tuple of feature and target vector
-def read_input(line):
-  t = line.split(',')
-  f = t[0]
-  i = int(t[1])
-  v = t[2:]
-  filename = '{0}/{1}-{2:02d}.jpg'.format(args['dir'], f, i)
-  return load_as_feature(filename), v
 
 def validate(samples):
   raise NotImplementedError

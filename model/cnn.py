@@ -19,7 +19,7 @@ class CNN():
   """
   def __init__(self, image_dim, final_vec_dim):
 
-    n1 = round(image_dim/3)
+    n1 = round(image_dim/8)
     n2 = round(n1/8)
     n3 = round(n2/16)
     n4 = final_vec_dim

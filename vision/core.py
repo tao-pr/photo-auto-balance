@@ -27,7 +27,7 @@ def img_to_feature(img):
   img = img.crop((0,0,d,d)) # Make it square
   img = img.resize((get_sample_dim(),get_sample_dim())) # Unify the dimension
   img = img if img.mode=='HSV' else img.convert('HSV')
-  v   = np.array(img.getdata) # NOTE: Huge computation
+  v   = np.array(img.getdata()) # NOTE: Huge computation
   return np.reshape(v,v.size) # Roll into 1D vector
 
 def inverse_trans(v):
