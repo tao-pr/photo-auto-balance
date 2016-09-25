@@ -61,7 +61,7 @@ def train(samples):
         # filename | # | inverse transformation vector
         inv_trans_vec = ','.join([str(k) for k in inverse_trans(transformations[i])])
         sf.write("{0},{1},{2}\n".format(s,i,inv_trans_vec))
-        fullset.append({'x':img_to_feature(filtered[i]), 'y':inv_trans_vec})
+        fullset.append({'x':img_to_feature(filtered[i]), 'y':transformations[i]})
   
 
       # TAODEBUG: Save invert-filtered images
@@ -90,20 +90,17 @@ def train(samples):
     print('...{0} for training'.format(d))
     print('...{0} for validation'.format(len(fullset)-d))
 
-    # TAODEBUG:
-    print(fullset[0])
-      
     print('...Reading samples')
-    trainsetX = (l['x'] for l in fullset[d:])
-    validsetX = (l['x'] for l in fullset[:d])
-    trainsetY = (l['y'] for l in fullset[d:])
-    validsetY = (l['y'] for l in fullset[:d])
+    trainsetX = [l['x'] for l in fullset[d:]]
+    validsetX = [l['x'] for l in fullset[:d]]
+    trainsetY = [l['y'] for l in fullset[d:]]
+    validsetY = [l['y'] for l in fullset[:d]]
 
     trainset = (trainsetX, trainsetY)
     validset = (validsetX, validsetY)
 
-    dim_feature        = len(fullset[0]['x']) # dimension of input vector
-    dim_transformation = len(fullset[0]['y']) # dimension of final transformation vector
+    dim_feature        = np.size(fullset[0]['x']) # dimension of input vector
+    dim_transformation = np.size(fullset[0]['y']) # dimension of final transformation vector
     cnn = train_model((trainset,validset), dim_feature, dim_transformation)
 
   else:
