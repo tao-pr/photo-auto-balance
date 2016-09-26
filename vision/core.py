@@ -10,7 +10,7 @@ from .filters import *
 #from . import filters
 
 def get_sample_dim(): # n
-  return 64 # total vector dimensionality : n^5
+  return 64 # total vector dimensionality : n^2 * 3
 
 def generate_filtered(sample,max_combination=5):
   # Make transformation functions
@@ -22,13 +22,17 @@ def generate_filtered(sample,max_combination=5):
 def load_img(path):
   return Image.open(path)
 
+# Make a 2D feature vector
 def img_to_feature(img):
   d   = min(img.size)
   img = img.crop((0,0,d,d)) # Make it square
   img = img.resize((get_sample_dim(),get_sample_dim())) # Unify the dimension
   img = img if img.mode=='HSV' else img.convert('HSV')
-  v   = np.array(img.getdata()) # NOTE: Huge computation
-  return np.reshape(v,v.size) # Roll into 1D vector
+
+  # each element remains 2D
+  hsv = tuple(np.array(c) for c in img.split())
+
+  return np.concatenate(hsv,axis=1) # Merge all channels into [[h|s|v]], horizontally
 
 def inverse_trans(v):
   return inverse(v)

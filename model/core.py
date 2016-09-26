@@ -11,13 +11,14 @@ import numpy as np
 
 """
 Train the CNN model with the given dataset
-@param {(trainset, validationset)}
+@param {X-trainset}
+@param {y-trainset}
+@param {X-validation}
+@param {y-validation}
 @param {(int,int)} dimentions of image
 @param {int} dimension of output vector
 """
-def train_model(dataset, image_dim, final_vec_dim):
-
-  trainset, validationset = dataset
+def train_model(X, y, X_, y_, image_dim, final_vec_dim):
 
   # Create a new CNN
   print(colored('Creating a new CNN.','green'))
@@ -25,7 +26,10 @@ def train_model(dataset, image_dim, final_vec_dim):
   
   # Train the network
   print(colored('Training started.','green'))
-  cnn.train(trainset,validationset)
+  cnn.train(X, y)
+
+  # TAOTODO: Apply cross validation on (X_,y_)
+
   return cnn
 
 def save_model(model,path):

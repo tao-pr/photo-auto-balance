@@ -91,17 +91,20 @@ def train(samples):
     print('...{0} for validation'.format(len(fullset)-d))
 
     print('...Reading samples')
-    trainsetX = [l['x'] for l in fullset[d:]]
-    validsetX = [l['x'] for l in fullset[:d]]
-    trainsetY = [l['y'] for l in fullset[d:]]
-    validsetY = [l['y'] for l in fullset[:d]]
-
-    trainset = (trainsetX, trainsetY)
-    validset = (validsetX, validsetY)
+    trainsetX = np.asarray([l['x'] for l in fullset[d:]])
+    validsetX = np.asarray([l['x'] for l in fullset[:d]])
+    trainsetY = np.asarray([l['y'] for l in fullset[d:]])
+    validsetY = np.asarray([l['y'] for l in fullset[:d]])
 
     dim_feature        = np.size(fullset[0]['x']) # dimension of input vector
     dim_transformation = np.size(fullset[0]['y']) # dimension of final transformation vector
-    cnn = train_model((trainset,validset), dim_feature, dim_transformation)
+    cnn = train_model(
+      trainsetX,
+      trainsetY,
+      validsetX,
+      validsetY,
+      dim_feature, 
+      dim_transformation)
 
   else:
     print(colored('No samples in the given directory.','yellow'))

@@ -7,9 +7,13 @@ Convolutional Neural Network
 from theano import *
 from theano import tensor as T
 from scipy import *
-import theanets as N
-import theanets.layers.convolution as Cvl
 import numpy as np
+import lasagne
+from lasagne import layers
+from lasagne.updates import nesterov_momentum
+from nolearn.lasagne import NeuralNet
+from nolearn.lasagne import visualize
+from termcolor import colored
 from . import *
 
 class CNN():
@@ -19,42 +23,43 @@ class CNN():
   """
   def __init__(self, image_dim, final_vec_dim):
 
-    n1 = round(image_dim/8)
+    n1 = round(image_dim/16)
     n2 = round(n1/8)
-    n3 = round(n2/16)
-    n4 = final_vec_dim
+    n3 = final_vec_dim
 
     print('...CNN layers nodes:')
     print('...input dim: {0}'.format(image_dim))
     print('...layer #1 : {0} nodes'.format(n1))
     print('...layer #2 : {0} nodes'.format(n2))
     print('...layer #3 : {0} nodes'.format(n3))
-    print('...layer #4 : {0} nodes'.format(n4))
 
-    l1 = Cvl.Conv1(n1,size=n1,inputs=image_dim)  # Pixel-shape scanner
-    l2 = Cvl.Conv1(n2,size=n2,inputs=n1)  # Shape encoder
-    l3 = Cvl.Conv1(n3,size=n3,inputs=n2)  # Final feature mapper
-    l4 = Cvl.Conv1(n4,size=n4,inputs=n3)  # Classifiers
+    l1 = ('input',   layers.InputLayer)
+    l2 = ('conv2d1', layers.Conv2DLayer)
+    l3 = ('pool1',   layers.MaxPool2DLayer)
+    l4 = ('hidden1', layers.DenseLayer)
+    l5 = ('output',  layers.DenseLayer)
+
+
 
     # Create a NN structure
-    self.net = N.Autoencoder(\
-      layers=[l1, l2, l3, l4]\
+    print('...Building initial structure')
+    self.net = NeuralNet(
+      layers=[l1, l2, l3, l4, l5],
+      input_shape=(None, 1, image_dim, image_dim*3),
+      conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_pool_size=(2, 2),
+      hidden4_num_units=400,
+      output_num_units=final_vec_dim,
+      update_learning_rate=0.1,
+      update_momentum=0.8,
+      regression=True,
+      max_epochs=200,
+      verbose=1
       )
 
-    # Adjust parameters
-    self.add_loss('xe', weight=0.1) # Cross-entropy loss
-
-
-  def train(self,trainset,validationset):
+  def train(self,X,y):
     print(colored('Training CNN','green'))
-    self.net.train(
-      trainset, validationset,
-      algo='rmsprop',
-      learning_rate=0.01 )
-    n = 0
-    # for train,valid in self.net.itertrain(trainset, validationset, **kwargs):
-    #   print('...Training iter #{0}, loss = {1:.2f}'.format(n, train['loss']))
-    #   n += 1
+    self.net.fit(X,y)
+    print(colored('Training all DONE!','green'))
 
   def predict(self,candidate):
     return self.net.predict(candidate)
