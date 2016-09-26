@@ -1,0 +1,7 @@
+Lasagne == 0.1
+nolearn == 0.6.0
+numpy == 1.10.4
+scipy == 0.15.1
+termcolor == 1.1.0
+Theano == 0.8.2
+Pillow == 3.3.1
