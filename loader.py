@@ -14,6 +14,7 @@ import os
 import sys
 import argparse
 import numpy as np
+import _pickle as pickle
 from itertools import tee
 from termcolor import colored
 from pprint import pprint
@@ -45,11 +46,11 @@ def train(samples):
       
       # Apply generated filters
       transformations,filtered = generate_filtered(src,args['permutation'])
-      print('    {} filters applied'.format(\
+      print('...{} filters applied'.format(\
         colored(len(filtered),'green')))
 
       # Save generated filtered images
-      print(colored('     Saving outputs','yellow'))
+      print(colored('...Saving outputs','yellow'))
       for i in range(len(filtered)):
         name = s.split('.')[0]
         # Save filtered images
@@ -105,6 +106,13 @@ def train(samples):
       validsetY,
       dim_feature, 
       dim_transformation)
+
+    # Serialise the model
+    path_model = args['dir'] + '/model.cnn'
+    with open(path_model, 'wb') as f:
+      print(colored('Saving the model','green'))
+      pickle.dump(cnn, f, -1)
+      print('...Done!')
 
   else:
     print(colored('No samples in the given directory.','yellow'))
