@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+# Run the CNN training
+
+MAX=70
+RATIO=0.9
+
+python3 loader.py --train --ratio $RATIO
