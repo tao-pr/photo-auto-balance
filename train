@@ -5,4 +5,7 @@
 MAX=70
 RATIO=0.9
 
+rm data/out/*
+rm data/unfiltered/*
+
 python3 loader.py --train --ratio $RATIO
