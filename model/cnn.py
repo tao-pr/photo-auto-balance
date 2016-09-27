@@ -48,9 +48,7 @@ class CNN():
     # TAOTODO: Illustrate the network
 
   def train(self,X,y):
-    print(colored('Training CNN','green'))
     self.net.fit(X,y)
-    print(colored('Training all DONE!','green'))
 
   def predict(self,candidate):
     return self.net.predict(candidate)

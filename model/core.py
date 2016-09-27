@@ -27,8 +27,20 @@ def train_model(X, y, X_, y_, image_dim, final_vec_dim):
   # Train the network
   print(colored('Training started.','green'))
   cnn.train(X, y)
+  print(colored('Training finished.','green'))
 
-  # TAOTODO: Apply cross validation on (X_,y_)
+  # Apply cross validation on (X_,y_)
+  print(colored('Cross validation started.','green'))
+  z  = [cnn.predict(i) for i in X]
+  z_ = [cnn.predict(i) for i in X_]
+
+  t  = 100.0*len([a==b for a,b in zip(z,y)])/float(len(z))
+  t_ = 100.0*len([a==b for a,b in zip(z_,y_)])/float(len(z_))
+
+  print('===============================================')
+  print(' Accurary measured on trainset:       {0:.2f}%'.format(t))
+  print(' Accuracy measured on validation set: {0:.2f}%'.format(t_))
+  print('===============================================')
 
   return cnn
 
