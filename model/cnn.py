@@ -34,8 +34,9 @@ class CNN():
     self.net = NeuralNet(
       layers=[l1, l2, l3, l4, l5],
       input_shape=(None, 1, image_dim, image_dim*3),
-      conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_pool_size=(2, 2),
-      hidden1_num_units=400,
+      conv1_num_filters=15, conv1_filter_size=(5, 5), 
+      pool1_pool_size=(3, 3),
+      hidden1_num_units=100,
       output_num_units=final_vec_dim,
       update_learning_rate=0.1,
       update_momentum=0.8,
@@ -43,6 +44,8 @@ class CNN():
       max_epochs=200,
       verbose=1
       )
+
+    # TAOTODO: Illustrate the network
 
   def train(self,X,y):
     print(colored('Training CNN','green'))

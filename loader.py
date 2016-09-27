@@ -14,7 +14,6 @@ import os
 import sys
 import argparse
 import numpy as np
-import _pickle as pickle
 from itertools import tee
 from termcolor import colored
 from pprint import pprint
@@ -109,10 +108,7 @@ def train(samples):
 
     # Serialise the model
     path_model = args['dir'] + '/model.cnn'
-    with open(path_model, 'wb') as f:
-      print(colored('Saving the model','green'))
-      pickle.dump(cnn, f, -1)
-      print('...Done!')
+    save_model(cnn, path_model)
 
   else:
     print(colored('No samples in the given directory.','yellow'))

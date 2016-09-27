@@ -6,7 +6,7 @@ Model training and utilisation
 
 from .cnn import CNN
 from termcolor import colored
-import pickle
+import _pickle as pickle
 import numpy as np
 
 """
@@ -32,11 +32,16 @@ def train_model(X, y, X_, y_, image_dim, final_vec_dim):
 
   return cnn
 
-def save_model(model,path):
-  raise NotImplementedError
+def save_model(cnn,path):
+  with open(path, 'wb') as f:
+    print(colored('Saving the model','green'))
+    pickle.dump(cnn, f, -1)
+    print('...Done!')
 
 def load_model(path):
-  raise NotImplementedError
+  with open(path, 'rb') as f:
+    print(colored('Loading the model','green'))
+    return pickle.load(f, -1)
 
-def generate_output(model,candidate):
-  raise NotImplementedError
+def generate_output(cnn,candidate):
+  return cnn.predict(candidate)
