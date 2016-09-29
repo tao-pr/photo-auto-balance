@@ -10,7 +10,7 @@ automate image color/level adjustment.
 Install all prerequisites with the following command.
 
 ```bash
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 
 ### Prepare training directory
