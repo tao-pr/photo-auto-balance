@@ -124,9 +124,9 @@ def process_with(path, f):
   return f(dataset)
 
 if __name__ == '__main__':
-  print(colored('•••••••••••••••••••••','magenta'))
+  print(colored('=====================','magenta'))
   print(colored('Loader started ...','magenta'))
-  print(colored('•••••••••••••••••••••','magenta'))
+  print(colored('=====================','magenta'))
   
   path      = args['dir']
   print('Executing function...')
