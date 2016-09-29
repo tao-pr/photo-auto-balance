@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # Run the CNN training
 
@@ -9,3 +9,5 @@ rm data/out/*
 rm data/unfiltered/*
 
 python3 loader.py --train --ratio $RATIO
+
+echo "======== FINISHED ========"

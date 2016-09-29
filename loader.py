@@ -98,6 +98,7 @@ def train(samples):
 
     dim_feature        = np.size(fullset[0]['x']) # dimension of input vector
     dim_transformation = np.size(fullset[0]['y']) # dimension of final transformation vector
+    
     cnn = train_model(
       trainsetX,
       trainsetY,
