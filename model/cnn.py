@@ -11,6 +11,7 @@ import numpy as np
 import lasagne
 from lasagne import layers
 from lasagne.updates import nesterov_momentum
+from lasagne.objectives import *
 from nolearn.lasagne import NeuralNet
 from nolearn.lasagne import visualize
 from termcolor import colored
@@ -42,6 +43,7 @@ class CNN():
       update_momentum=0.8,
       regression=True,
       max_epochs=200,
+      objective_loss_function=squared_error,
       verbose=1
       )
 
