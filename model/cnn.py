@@ -34,7 +34,7 @@ class CNN():
     print('...output size of : ', final_vec_dim)
     self.net = NeuralNet(
       layers=[l1, l2, l3, l4],
-      input_shape=(None, 1, image_dim[0], image_dim[1]),
+      input_shape=(None,) + image_dim,
       conv1_num_filters=15, conv1_filter_size=(7, 7), 
       pool1_pool_size=(3, 3),
       output_num_units=final_vec_dim, output_nonlinearity=None,

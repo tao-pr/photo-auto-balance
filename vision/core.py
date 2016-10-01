@@ -30,9 +30,7 @@ def img_to_feature(img):
   img = img if img.mode=='HSV' else img.convert('HSV')
 
   # each element remains 2D
-  hsv = tuple(np.array(c) for c in img.split())
-
-  return np.concatenate(hsv,axis=1) # Merge all channels into [[h|s|v]], horizontally
+  return np.array([np.array(c) for c in img.split()])
 
 def inverse_trans(v):
   return inverse(v)
