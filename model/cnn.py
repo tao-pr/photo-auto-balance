@@ -26,18 +26,18 @@ class CNN():
     l1 = ('input',   layers.InputLayer)
     l2 = ('conv1',   layers.Conv2DLayer)
     l3 = ('pool1',   layers.MaxPool2DLayer)
-    l4 = ('hidden1', layers.DenseLayer)
-    l5 = ('output',  layers.DenseLayer)
+    l4 = ('output',  layers.DenseLayer)
 
     # Create a NN structure
     print('...Building initial structure')
+    print('...input size of  : ', image_dim, ' x ', image_dim*3 )
+    print('...output size of : ', final_vec_dim)
     self.net = NeuralNet(
-      layers=[l1, l2, l3, l4, l5],
+      layers=[l1, l2, l3, l4],
       input_shape=(None, 1, image_dim, image_dim*3),
-      conv1_num_filters=15, conv1_filter_size=(5, 5), 
+      conv1_num_filters=15, conv1_filter_size=(7, 7), 
       pool1_pool_size=(3, 3),
-      hidden1_num_units=100,
-      output_num_units=final_vec_dim,
+      output_num_units=final_vec_dim, output_nonlinearity=None,
       update_learning_rate=0.1,
       update_momentum=0.8,
       regression=True,
