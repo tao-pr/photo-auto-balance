@@ -31,15 +31,19 @@ def train_model(X, y, X_, y_, image_dim, final_vec_dim):
 
   # Apply cross validation on (X_,y_)
   print(colored('Cross validation started.','green'))
-  z  = [cnn.predict(i) for i in X]
-  z_ = [cnn.predict(i) for i in X_]
+  z  = cnn.predict(X)
+  z_ = cnn.predict(X_)
 
-  t  = 100.0*len([a==b for a,b in zip(z,y)])/float(len(z))
-  t_ = 100.0*len([a==b for a,b in zip(z_,y_)])/float(len(z_))
+  # RMS error
+  def measure(v,w):
+    return np.sqrt(np.sum([(i-j)**2 for i,j in zip(v,w)]))
+
+  t  = np.sum([measure(a,b) for a,b in zip(z,y)])/float(len(z))/float(len(z))
+  t_ = np.sum([measure(a,b) for a,b in zip(z_,y_)])/float(len(z_))/float(len(z))
 
   print('===============================================')
-  print(' Accurary measured on trainset:       {0:.2f}%'.format(t))
-  print(' Accuracy measured on validation set: {0:.2f}%'.format(t_))
+  print(' Error measured on trainset:       {0:.2f}%'.format(t))
+  print(' Error measured on validation set: {0:.2f}%'.format(t_))
   print('===============================================')
 
   return cnn

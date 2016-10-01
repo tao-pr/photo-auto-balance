@@ -42,7 +42,7 @@ class CNN():
       update_learning_rate=0.1,
       update_momentum=0.8,
       regression=True,
-      max_epochs=200,
+      max_epochs=100,
       objective_loss_function=squared_error,
       verbose=1
       )
@@ -52,8 +52,8 @@ class CNN():
   def train(self,X,y):
     self.net.fit(X,y)
 
-  def predict(self,candidate):
-    return self.net.predict(candidate)
+  def predict(self,candidates):
+    return self.net.predict(candidates)
 
 
 
