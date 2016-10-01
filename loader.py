@@ -96,16 +96,15 @@ def train(samples):
     trainsetY = np.asarray([l['y'] for l in fullset[d:]])
     validsetY = np.asarray([l['y'] for l in fullset[:d]])
 
-    dim_feature        = np.size(fullset[0]['x']) # dimension of input vector
-    dim_transformation = np.size(fullset[0]['y']) # dimension of final transformation vector
-    
+    shape_x = np.shape(fullset[0]['x'])
+    shape_y = np.shape(fullset[0]['y'])
     cnn = train_model(
       trainsetX,
       trainsetY,
       validsetX,
       validsetY,
-      dim_feature, 
-      dim_transformation)
+      shape_x, 
+      shape_y[0])
 
     # Serialise the model
     path_model = args['dir'] + '/model.cnn'

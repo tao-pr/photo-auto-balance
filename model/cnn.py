@@ -30,11 +30,11 @@ class CNN():
 
     # Create a NN structure
     print('...Building initial structure')
-    print('...input size of  : ', image_dim, ' x ', image_dim*3 )
+    print('...input size of  : ', image_dim)
     print('...output size of : ', final_vec_dim)
     self.net = NeuralNet(
       layers=[l1, l2, l3, l4],
-      input_shape=(None, 1, image_dim, image_dim*3),
+      input_shape=(None, 1, image_dim[0], image_dim[1]),
       conv1_num_filters=15, conv1_filter_size=(7, 7), 
       pool1_pool_size=(3, 3),
       output_num_units=final_vec_dim, output_nonlinearity=None,
