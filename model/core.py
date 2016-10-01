@@ -8,6 +8,7 @@ from .cnn import CNN
 from termcolor import colored
 import _pickle as pickle
 import numpy as np
+from lasagne.objectives import *
 
 """
 Train the CNN model with the given dataset
@@ -34,16 +35,13 @@ def train_model(X, y, X_, y_, image_dim, final_vec_dim):
   z  = cnn.predict(X)
   z_ = cnn.predict(X_)
 
-  # RMS error
-  def measure(v,w):
-    return np.sqrt(np.sum([(i-j)**2 for i,j in zip(v,w)]))
-
-  t  = np.sum([measure(a,b) for a,b in zip(z,y)])/float(len(z))/float(len(z))
-  t_ = np.sum([measure(a,b) for a,b in zip(z_,y_)])/float(len(z_))/float(len(z))
+  # Measure RMS error
+  rmse  = np.sum([(a-b)**2 for a,b in zip(z,y)]) / float(len(z))
+  rmse_ = np.sum([(a-b)**2 for a,b in zip(z_,y_)]) / float(len(z_))
 
   print('===============================================')
-  print(' Error measured on trainset:       {0:.2f}%'.format(t))
-  print(' Error measured on validation set: {0:.2f}%'.format(t_))
+  print(' RMS Error measured on trainset:       {0:.2f}'.format(rmse))
+  print(' RMS Error measured on validation set: {0:.2f}'.format(rmse_))
   print('===============================================')
 
   return cnn

@@ -107,7 +107,7 @@ def train(samples):
       shape_y[0])
 
     # Serialise the model
-    path_model = args['dir'] + '/model.cnn'
+    path_model = args['dir'] + '../model.cnn'
     save_model(cnn, path_model)
 
   else:
