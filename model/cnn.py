@@ -48,7 +48,7 @@ class CNN():
       update_learning_rate=0.001,
       update_momentum=0.8,
       regression=True,
-      max_epochs=100,
+      max_epochs=400,
       objective_loss_function=squared_error,
       verbose=1
       )

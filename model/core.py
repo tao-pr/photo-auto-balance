@@ -55,7 +55,7 @@ def save_model(cnn,path):
 def load_model(path):
   with open(path, 'rb') as f:
     print(colored('Loading the model','green'))
-    return pickle.load(f, -1)
+    return pickle.load(f)
 
 def generate_output(cnn,candidate):
   return cnn.predict(candidate)

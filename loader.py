@@ -27,7 +27,7 @@ arguments.add_argument('--dir', type=str, default='./data/raw/') # Where to pick
 arguments.add_argument('--train', dest='train', action='store_true') # Training mode
 arguments.add_argument('--ratio', type=float, default=0.8) # Ratio of the training set for cross validation
 arguments.add_argument('--permutation', type=int, default=8) # Number of filters to apply
-arguments.add_argument('--validate', dest='validate', action='store_true') # Validation mode
+arguments.add_argument('--enhance', dest='enhance', action='store_true') # Validation mode
 args = vars(arguments.parse_args(sys.argv[1:]))
 
 def train(samples):
@@ -114,8 +114,32 @@ def train(samples):
     print(colored('No samples in the given directory.','yellow'))
     print(colored('Ending the job now...','yellow'))
 
-def validate(samples):
-  raise NotImplementedError
+def enhance(samples):
+  # Load the samples, convert them to feature vectors
+  print(colored('Loading samples...','green'))
+  S = [load_img(args['dir'] + '/' + s) for s in samples]
+  X = [img_to_feature(s) for s in S]
+
+  print(np.shape(X))
+
+  # Load the model
+  path_model = args['dir'] + '/../model.cnn'
+  model = load_model(path_model)
+
+  # Generate transformation vectors for those samples
+  V = model.predict(X)
+
+  print(np.shape(V))
+
+  # Generate outputs 
+  print(colored('Generating outputs...','magenta'))
+  for s,u,v in zip(samples,S,V):
+    path_out = args['dir'] + '/../unfiltered/' + s
+    print('...Processing : {0}'.format(colored(s,'cyan')))
+    out = apply_filter(v)(u)
+    out.convert('RGB').save(path_out)
+
+  print('...Done!')
 
 def process_with(path, f):
   # Iterate through the path
@@ -129,5 +153,5 @@ if __name__ == '__main__':
   
   path      = args['dir']
   print('Executing function...')
-  with_func = train if args['train'] else validate
+  with_func = train if args['train'] else enhance
   process_with(path, with_func)
