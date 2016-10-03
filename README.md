@@ -42,6 +42,24 @@ in the arguments. The reverse filtered images will be generated inside
 rightaway after the reverse filtered samples are generated. 
 This takes **huge computational power and time**.
 
+
+### Pro Tip: Quick Setup on Ubuntu
+
+To set all dependencies up and start the training process 
+in one go within just few minutes, run the following 
+script:
+
+```bash
+$ ./setup-ec2-and-run
+```
+
+What the script does are:
+
+- [x] Install all required packages
+- [x] Download the primary training data
+- [x] Start the training process in background
+- [x] Leaves the training log at `/home/ubuntu/photo-auto-balance/log.txt`
+
 ---
 
 ## Licence
