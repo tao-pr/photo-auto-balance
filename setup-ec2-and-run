@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# SET UP AN AWS EC2 INSTANCE (UBUNTU)
+# AND RUN THE TRAINING PROCESS
+
+sudo apt-get update
+sudo apt-get install gfortran libopenblas-dev liblapack-dev
+sudo apt-get install python3-dev
+sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk
+sudo apt-get install git python3-pip
+cd /home/ubuntu/
+git clone https://github.com/starcolon/photo-auto-balance.git
+cd photo-auto-balance/
+mkdir -p data/raw
+mkdir -p data/out
+mkdir -p data/unfiltered
+sudo pip3 install -r requirements.txt 
+cd data/
+wget http://starcolon.com/data/train.tar.gz
+tar -xvf train.tar.gz 
+rm raw/._*
+cd ..
+python3 loader.py --train &> log.txt
