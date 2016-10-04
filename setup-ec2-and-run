@@ -20,4 +20,9 @@ wget http://starcolon.com/data/train.tar.gz
 tar -xvf train.tar.gz 
 rm raw/._*
 cd ..
-python3 loader.py --train &> log.txt
+
+echo "[All set!]"
+echo "Ctrl + C and run the following command to train:"
+echo ""
+echo "$ python3 loader.py --train &> log.txt 2>&1 &"
+echo ""
