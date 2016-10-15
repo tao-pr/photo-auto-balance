@@ -7,7 +7,6 @@ Core module for computer visionary stuffs
 import numpy as np
 from PIL import Image
 from .filters import *
-#from . import filters
 
 def get_sample_dim(): # n
   return 128 # total vector dimensionality : n^2 * 3
