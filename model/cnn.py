@@ -31,7 +31,7 @@ class CNN():
     l_conv2 = layers.Conv2DLayer(l_conv1, 32, (3,3))
     l_pool  = layers.MaxPool2DLayer(l_conv2, (5,5), stride=2)
     l_1d1   = layers.DenseLayer(l_pool, 64)
-    l_1d2   = layers.DenseLayer(l_1d1, 48)
+    l_1d2   = layers.DenseLayer(l_1d1, final_vec_dim)
 
     self.net         = l_1d2
     self.input_layer = l_input
@@ -88,7 +88,8 @@ class CNN():
     print(colored('...Preparing training functions','green'))
     train  = theano.function(
       [inputx, outputy],
-      loss, updates=update
+      loss, 
+      updates=update
       )
     gen_output = theano.function([inputx], output)
 
@@ -100,7 +101,7 @@ class CNN():
         
         t0       = time.time()
         b0,bN,bi = 0, batch_size, 0
-        
+
         # Train each batch of the input
         while bN < X.shape[0]:
           print('......batch #', bi)
