@@ -125,8 +125,8 @@ class CNN():
           _output  = gen_output(X[b0:bN])
           _loss    = np.mean((_output - y[b0:bN])**2)
           # Measure validation loss (RMSE)
-          _outputv = gen_output(X)
-          _lossv   = np.mean((_outputv - y)**2)
+          _outputv = gen_output(X_)
+          _lossv   = np.mean((_outputv - y_)**2)
           print('......loss on trainset   : {0:0.2f}'.format(_loss))
           print('......loss on validation : {0:0.2f}'.format(_lossv))
 
