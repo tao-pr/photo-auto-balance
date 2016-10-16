@@ -72,11 +72,19 @@ class CNN():
   # def train(self,X,y):
   #   self.net.fit(X,y)
 
-  def train(self,X,y,num_epochs=100,batch_size=100,learn_rate=0.01):
+  # Train the neural net
+  # @param {Matrix} trainset X
+  # @param {Vector} trainset y
+  # @param {Matrix} validation set X
+  # @param {Vector} validation set y
+  # @param {int} batch size
+  # @param {int} number of epochs to run
+  # @param {double} learning rate (non-negative, non-zero)
+  def train(self,X,y,X_,y_,batch_size=100,num_epochs=100,learn_rate=0.01):
     
     # Symbolic I/O of the network
     inputx  = self.input_layer.input_var
-    outputy = T.dmatrix('ys') # T.dvector('y') # Expected output
+    outputy = T.dmatrix('ys')             # Expected output
     output  = layers.get_output(self.net) # Actual output
 
     # Minimising RMSE with Adagradient
@@ -109,16 +117,20 @@ class CNN():
           train(X[b0:bN], y[b0:bN])
 
           # Measure training loss (RMSE)
-          _output = gen_output(X)
-          _loss   = np.mean((_output - y)**2)
-          print('......loss : {0:0.2f}'.format(_loss))
+          _output  = gen_output(X)
+          _loss    = np.mean((_output - y)**2)
+          # Measure validation loss (RMSE)
+          _outputv = gen_output(X_)
+          _lossv   = np.mean((_outputv - y_)**2)
+          print('......loss on trainset   : {0:0.2f}'.format(_loss))
+          print('......loss on validation : {0:0.2f}'.format(_lossv))
 
           b0 += batch_size
           bN += batch_size
           bi += 1
         
         t1 = time.time()
-        print(colored('...{0:.1f} s elapsed'.format(t1-t0), 'yellow'))
+        print(colored('...{0:.1f} s elapsed, {1} batches processed'.format(t1-t0, bi), 'yellow'))
 
     except Exception as e:
       # Any error
