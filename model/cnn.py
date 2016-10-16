@@ -132,6 +132,13 @@ class CNN():
         t1 = time.time()
         print(colored('...{0:.1f} s elapsed, {1} batches processed'.format(t1-t0, bi), 'yellow'))
 
+        # Shuffle the trainset
+        print('...Shuffling the trainset')
+        rd = np.arange(len(y))
+        np.random.shuffle(rd)
+        X = X[rd]
+        y = y[rd]
+
     except Exception as e:
       # Any error
       print(colored('ERROR:','red'), type(e))
