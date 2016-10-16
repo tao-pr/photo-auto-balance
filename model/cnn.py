@@ -87,6 +87,11 @@ class CNN():
     outputy = T.dmatrix('ys')             # Expected output
     output  = layers.get_output(self.net) # Actual output
 
+    print('... X : ', X.shape)
+    print('... y : ', y.shape)
+    print('... X_ : ', X_.shape)
+    print('... y_ : ', y_.shape)
+
     # Minimising RMSE with Adagradient
     print(colored('...Preparing measurement functions','green'))
     loss   = T.mean((output - outputy)**2)
@@ -120,8 +125,8 @@ class CNN():
           _output  = gen_output(X[b0:bN])
           _loss    = np.mean((_output - y[b0:bN])**2)
           # Measure validation loss (RMSE)
-          _outputv = gen_output(X_[b0:bN])
-          _lossv   = np.mean((_outputv - y_[b0:bN])**2)
+          _outputv = gen_output(X)
+          _lossv   = np.mean((_outputv - y)**2)
           print('......loss on trainset   : {0:0.2f}'.format(_loss))
           print('......loss on validation : {0:0.2f}'.format(_lossv))
 

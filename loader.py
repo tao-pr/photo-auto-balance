@@ -92,10 +92,10 @@ def train(samples):
     print('...{0} for validation'.format(len(fullset)-d))
 
     print('...Reading samples')
-    trainsetX = np.asarray([l['x'] for l in fullset[d:]])
-    validsetX = np.asarray([l['x'] for l in fullset[:d]])
-    trainsetY = np.asarray([l['y'] for l in fullset[d:]])
-    validsetY = np.asarray([l['y'] for l in fullset[:d]])
+    trainsetX = np.asarray([l['x'] for l in fullset[:d]])
+    validsetX = np.asarray([l['x'] for l in fullset[d:]])
+    trainsetY = np.asarray([l['y'] for l in fullset[:d]])
+    validsetY = np.asarray([l['y'] for l in fullset[d:]])
 
     shape_x = np.shape(fullset[0]['x'])
     shape_y = np.shape(fullset[0]['y'])
