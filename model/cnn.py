@@ -112,16 +112,16 @@ class CNN():
 
         # Train each batch of the input
         while bN < X.shape[0]:
-          print('......batch #', bi)
+          print('......batch #', bi, ' ({0}~{1})'.format(b0,bN))
 
           train(X[b0:bN], y[b0:bN])
 
           # Measure training loss (RMSE)
-          _output  = gen_output(X)
-          _loss    = np.mean((_output - y)**2)
+          _output  = gen_output(X[b0:bN])
+          _loss    = np.mean((_output - y[b0:bN])**2)
           # Measure validation loss (RMSE)
-          _outputv = gen_output(X_)
-          _lossv   = np.mean((_outputv - y_)**2)
+          _outputv = gen_output(X_[b0:bN])
+          _lossv   = np.mean((_outputv - y_[b0:bN])**2)
           print('......loss on trainset   : {0:0.2f}'.format(_loss))
           print('......loss on validation : {0:0.2f}'.format(_lossv))
 
