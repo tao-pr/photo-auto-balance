@@ -76,8 +76,8 @@ class CNN():
     
     # Symbolic I/O of the network
     inputx  = self.input_layer.input_var
-    outputy = T.dvector('y')
-    output  = layers.get_output(self.net)
+    outputy = T.dmatrix('ys') # T.dvector('y') # Expected output
+    output  = layers.get_output(self.net) # Actual output
 
     # Minimising RMSE with Adagradient
     print(colored('...Preparing measurement functions','green'))
@@ -105,8 +105,9 @@ class CNN():
         # Train each batch of the input
         while bN < X.shape[0]:
           print('......batch #', bi)
+
           train(X[b0:bN], y[b0:bN])
-          
+
           # Measure training loss (RMSE)
           _output = gen_output(X)
           _loss   = np.mean((_output - y)**2)
@@ -127,7 +128,8 @@ class CNN():
       pass
 
   def predict(self,candidates):
-    return self.net.predict(candidates)
+    gen_output = theano.function([inputx], output)
+
 
 
 
