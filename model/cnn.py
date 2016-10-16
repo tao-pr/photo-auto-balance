@@ -80,7 +80,7 @@ class CNN():
   # @param {int} batch size
   # @param {int} number of epochs to run
   # @param {double} learning rate (non-negative, non-zero)
-  def train(self,X,y,X_,y_,batch_size=100,num_epochs=100,learn_rate=0.01):
+  def train(self,X,y,X_,y_,batch_size=100,num_epochs=100,learn_rate=0.03):
     
     # Symbolic I/O of the network
     inputx  = self.input_layer.input_var
@@ -127,8 +127,8 @@ class CNN():
           # Measure validation loss (RMSE)
           _outputv = gen_output(X_)
           _lossv   = np.mean((_outputv - y_)**2)
-          print('......loss on trainset   : {0:0.2f}'.format(_loss))
-          print('......loss on validation : {0:0.2f}'.format(_lossv))
+          print('......loss on trainset   : {0:0.4f}'.format(_loss))
+          print('......loss on validation : {0:0.4f}'.format(_lossv))
 
           b0 += batch_size
           bN += batch_size
