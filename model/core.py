@@ -18,9 +18,10 @@ Train the CNN model with the given dataset
 @param {y-validation}
 @param {(int,int)} dimentions of image
 @param {int} dimension of output vector
+@param {int} number of epochs
 @param {int} batch size
 """
-def train_model(X, y, X_, y_, image_dim, final_vec_dim, batch_size):
+def train_model(X, y, X_, y_, image_dim, final_vec_dim, epoch, batch_size):
 
   # Create a new CNN
   print(colored('Creating a new CNN.','green'))
@@ -28,7 +29,7 @@ def train_model(X, y, X_, y_, image_dim, final_vec_dim, batch_size):
   
   # Train the network
   print(colored('Training started.','green'))
-  cnn.train(X, y, X_, y_, batch_size)
+  cnn.train(X, y, X_, y_, batch_size, epoch)
   print(colored('Training finished.','green'))
 
   print('===============================================')
