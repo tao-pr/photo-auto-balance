@@ -24,10 +24,15 @@ arguments = argparse.ArgumentParser()
 arguments.add_argument('--debug', dest='debug', action='store_true')
 arguments.add_argument('--limit', type=int, default=None) # Limit the number of raw samples to process
 arguments.add_argument('--dir', type=str, default='./data/raw/') # Where to pick the samples
+
+# Training arguments
 arguments.add_argument('--train', dest='train', action='store_true') # Training mode
 arguments.add_argument('--ratio', type=float, default=0.8) # Ratio of the training set for cross validation
 arguments.add_argument('--batch', type=int, default=100) # Batch size
 arguments.add_argument('--permutation', type=int, default=8) # Number of filters to apply
+arguments.add_argument('--epoch', type=int, default=100) # Number of epochs to train
+
+# Enhancement arguments
 arguments.add_argument('--enhance', dest='enhance', action='store_true') # Validation mode
 args = vars(arguments.parse_args(sys.argv[1:]))
 
@@ -106,6 +111,7 @@ def train(samples):
       validsetY,
       shape_x, 
       shape_y[0],
+      args['epoch'],
       args['batch'])
 
     # Serialise the model
