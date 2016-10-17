@@ -80,7 +80,7 @@ class CNN():
   # @param {int} batch size
   # @param {int} number of epochs to run
   # @param {double} learning rate (non-negative, non-zero)
-  def train(self,X,y,X_,y_,batch_size=100,num_epochs=100,learn_rate=0.03):
+  def train(self,X,y,X_,y_,batch_size=100,num_epochs=100,learn_rate=0.1):
     
     # Symbolic I/O of the network
     inputx  = self.input_layer.input_var
