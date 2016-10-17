@@ -18,8 +18,9 @@ Train the CNN model with the given dataset
 @param {y-validation}
 @param {(int,int)} dimentions of image
 @param {int} dimension of output vector
+@param {int} batch size
 """
-def train_model(X, y, X_, y_, image_dim, final_vec_dim):
+def train_model(X, y, X_, y_, image_dim, final_vec_dim, batch_size):
 
   # Create a new CNN
   print(colored('Creating a new CNN.','green'))
@@ -27,17 +28,8 @@ def train_model(X, y, X_, y_, image_dim, final_vec_dim):
   
   # Train the network
   print(colored('Training started.','green'))
-  cnn.train(X, y)
+  cnn.train(X, y, X_, y_, batch_size)
   print(colored('Training finished.','green'))
-
-  # Apply cross validation on (X_,y_)
-  print(colored('Cross validation started.','green'))
-  z  = cnn.predict(X)
-  z_ = cnn.predict(X_)
-
-  # Measure RMS error
-  rmse  = np.sum([(a-b)**2 for a,b in zip(z,y)]) / float(len(z))
-  rmse_ = np.sum([(a-b)**2 for a,b in zip(z_,y_)]) / float(len(z_))
 
   print('===============================================')
   print(' RMS Error measured on trainset:       {0:.2f}'.format(rmse))
