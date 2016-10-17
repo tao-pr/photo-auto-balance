@@ -106,10 +106,10 @@ class CNN():
       )
     gen_output = theano.function([inputx], output)
 
-    try:
-      print(colored('...Training started','green'))
-
-      for epoch in range(num_epochs):
+    print(colored('...Training started','green'))
+    for epoch in range(num_epochs):
+      err_list = []
+      with open('loss.csv', 'a+') as tcsv:
         print('...[Ep] #', epoch)
         
         t0       = time.time()
@@ -118,7 +118,7 @@ class CNN():
         # Train each batch of the input
         while bN < X.shape[0]:
           print('......batch #', bi, ' ({0}~{1})'.format(b0,bN))
-
+          
           train(X[b0:bN], y[b0:bN])
 
           # Measure training loss (RMSE)
@@ -130,6 +130,7 @@ class CNN():
           print('......loss on trainset   : {0:0.4f}'.format(_loss))
           print('......loss on validation : {0:0.4f}'.format(_lossv))
 
+          err_list.append(str(_loss))
           b0 += batch_size
           bN += batch_size
           bi += 1
@@ -144,12 +145,10 @@ class CNN():
         X = X[rd]
         y = y[rd]
 
-    except Exception as e:
-      # Any error
-      print(colored('ERROR:','red'), type(e))
-      print(e)
-      # TAOTODO: Save the current model as is
-      pass
+        # Save losses
+        tcsv.write('#{0},'.format(epoch))
+        tcsv.write(','.join(err_list))
+        tcsv.write('\n')
 
   def predict(self,candidates):
     gen_output = theano.function([inputx], output)
