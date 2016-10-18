@@ -52,7 +52,7 @@ class CNN():
 
     # Symbolic I/O of the networks
     inputx  = [n.input_var for n in self.input_layers]
-    outputy = [T.dvector('y') for _ in range(len(self.nets))] # Expected output
+    outputy = [T.dmatrix('y') for _ in range(len(self.nets))] # Expected output
     output  = [layers.get_output(n) for n in self.nets] # Actual output
 
     print('... X : ', X.shape)
@@ -64,7 +64,7 @@ class CNN():
     print(colored('...Preparing measurement functions','green'))
     loss   = [T.mean((output[i] - outputy[i])**2) for i in range(len(self.nets))]
     params = [layers.get_all_params(n) for n in self.nets]
-    update = [adagrad(loss, param, learn_rate) for param in params]
+    update = [adagrad(loss[i], params[i], learn_rate) for i in range(len(self.nets))]
 
     print(colored('...Preparing training functions','green'))
     train  = [theano.function(
@@ -95,16 +95,18 @@ class CNN():
           
           # Train each model separately with the same samples
           for i in range(len(train)):
+            print('......(model #{0})'.format(i))
             _x = X[b0:bN]
-            _y = y[b0:bN, i]
+            _y = y[b0:bN, i].reshape(-1,1)
+
             train[i](_x, _y)
 
             # Measure training loss (RMSE)
             _output  = gen_output[i](_x)
             _loss    = np.mean((_output[i] - _y)**2)
             # Measure validation loss (RMSE)
-            _outputv = gen_output(X_)
-            _lossv   = np.mean((_outputv - y_[:, i])**2)
+            _outputv = gen_output[i](X_)
+            _lossv   = np.mean((_outputv[i] - y_[:, i].reshape(-1,1))**2)
 
             ll.append(_loss)
             llv.append(_lossv)
