@@ -84,8 +84,8 @@ class CNN():
         t0       = time.time()
         b0,bN,bi = 0, batch_size, 0
 
-        losses_train = []
-        losses_val   = []
+        losses_train = None
+        losses_val   = None
 
         # Each batch
         while bN < X.shape[0]:
@@ -116,8 +116,15 @@ class CNN():
           bi += 1
 
           # Collect the training loss values over batches
-          losses_train.append(ll)
-          losses_val.append(llv)
+          if losses_train:
+            losses_train = np.vstack((losses_train, np.array(ll)))
+            losses_val   = np.vstack((losses_val,   np.array(llv)))
+          else:
+            losses_train = np.array([ll])
+            losses_val   = np.array([llv])
+
+        # TAODEBUG:
+        print(losses_train)
 
         # All batches finished, collect loss values
         losses_train = np.mean(losses_train, axis=1)
