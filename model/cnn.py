@@ -10,6 +10,7 @@ from theano import tensor as T
 from scipy import *
 import numpy as np
 import lasagne
+import _pickle as pickle
 from lasagne import layers
 from lasagne.updates import adagrad
 from lasagne.objectives import *
@@ -148,7 +149,22 @@ class CNN():
         tcsv.write('V:' + ','.join(losses_val) + '\n')
 
   def predict(self,candidates):
+    # TAOTODO: Re-implement
     gen_output = theano.function([inputx], output)
+
+  def save(self,path):
+    model = [self.nets,
+             self.input_layers]
+    with open(path, 'wb') as f:
+      print(colored('Saving the model at {}'.format(path),'green'))
+      pickle.dump(model, f, -1)
+      print('...Done!')
+
+  @staticmethod
+  def load(path):
+    with open(path, 'rb') as f:
+      print(colored('Loading the model at {}'.format(path),'green'))
+      return pickle.load(f)
 
 
 
