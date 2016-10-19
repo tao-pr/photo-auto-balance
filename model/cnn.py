@@ -79,8 +79,7 @@ class CNN():
 
     print(colored('...Training started','green'))
     for epoch in range(num_epochs):
-      # err_list = []
-      # with open('loss.csv', 'a+') as tcsv:
+      with open('loss.csv', 'a+') as tcsv:
         print('...[Ep] #', epoch)
         
         t0       = time.time()
@@ -125,14 +124,15 @@ class CNN():
             losses_train = np.array([ll])
             losses_val   = np.array([llv])
 
-        # TAODEBUG: Should be multiple rows
-        print(losses_train)
-
         # All batches finished, collect loss values
-        losses_train = np.mean(losses_train, axis=0)
-        losses_val = np.mean(losses_val, axis=0)
-        print('...Training Loss   : ', losses_train)
-        print('...Validation Loss : ', losses_val)
+        losses_train = np.mean(losses_train, axis=0).tolist()
+        losses_val   = np.mean(losses_val, axis=0).tolist()
+
+        losses_train = ['{0:.4f}'.format(d) for d in losses_train]
+        losses_val   = ['{0:.4f}'.format(d) for d in losses_val]
+
+        print('...Training Loss   : ', ','.join(losses_train))
+        print('...Validation Loss : ', ','.join(losses_val))
 
         t1 = time.time()
         print(colored('...{0:.1f} s elapsed, {1} batches processed'.format(t1-t0, bi), 'yellow'))
@@ -145,9 +145,9 @@ class CNN():
         y = y[rd]
 
         # Save losses
-        # tcsv.write('#{0},'.format(epoch))
-        # tcsv.write(','.join(err_list))
-        # tcsv.write('\n')
+        tcsv.write('EP#{0},'.format(epoch) + '\n')
+        tcsv.write('T:' + ','.join(losses_train) + '\n')
+        tcsv.write('V:' + ','.join(losses_val) + '\n')
 
   def predict(self,candidates):
     gen_output = theano.function([inputx], output)
