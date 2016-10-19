@@ -40,15 +40,10 @@ def train_model(X, y, X_, y_, image_dim, final_vec_dim, epoch, batch_size):
   return cnn
 
 def save_model(cnn,path):
-  with open(path, 'wb') as f:
-    print(colored('Saving the model','green'))
-    pickle.dump(cnn, f, -1)
-    print('...Done!')
+  cnn.save(path)
 
 def load_model(path):
-  with open(path, 'rb') as f:
-    print(colored('Loading the model','green'))
-    return pickle.load(f)
+  return CNN.load(path)
 
 def generate_output(cnn,candidate):
   return cnn.predict(candidate)
