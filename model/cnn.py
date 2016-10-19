@@ -48,7 +48,7 @@ class CNN():
   # @param {int} batch size
   # @param {int} number of epochs to run
   # @param {double} learning rate (non-negative, non-zero)
-  def train(self,X,y,X_,y_,batch_size=100,num_epochs=100,learn_rate=0.1):
+  def train(self,X,y,X_,y_,batch_size=100,num_epochs=100,learn_rate=0.01):
 
     # Symbolic I/O of the networks
     inputx  = [n.input_var for n in self.input_layers]
@@ -65,8 +65,6 @@ class CNN():
     loss   = [T.mean((output[i] - outputy[i])**2) for i in range(len(self.nets))]
     params = [layers.get_all_params(n) for n in self.nets]
     update = [adagrad(loss[i], params[i], learn_rate) for i in range(len(self.nets))]
-
-    # TAOTOREVIEW: Adaptive learning rate
 
     print(colored('...Preparing training functions','green'))
     train  = [theano.function(
