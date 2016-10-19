@@ -66,6 +66,8 @@ class CNN():
     params = [layers.get_all_params(n) for n in self.nets]
     update = [adagrad(loss[i], params[i], learn_rate) for i in range(len(self.nets))]
 
+    # TAOTOREVIEW: Adaptive learning rate
+
     print(colored('...Preparing training functions','green'))
     train  = [theano.function(
       [inputx[i], outputy[i]],
@@ -116,19 +118,19 @@ class CNN():
           bi += 1
 
           # Collect the training loss values over batches
-          if losses_train:
+          if losses_train is not None:
             losses_train = np.vstack((losses_train, np.array(ll)))
             losses_val   = np.vstack((losses_val,   np.array(llv)))
           else:
             losses_train = np.array([ll])
             losses_val   = np.array([llv])
 
-        # TAODEBUG:
+        # TAODEBUG: Should be multiple rows
         print(losses_train)
 
         # All batches finished, collect loss values
-        losses_train = np.mean(losses_train, axis=1)
-        losses_val = np.mean(losses_val, axis=1)
+        losses_train = np.mean(losses_train, axis=0)
+        losses_val = np.mean(losses_val, axis=0)
         print('...Training Loss   : ', losses_train)
         print('...Validation Loss : ', losses_val)
 
