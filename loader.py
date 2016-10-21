@@ -104,6 +104,9 @@ def train(samples):
 
     shape_x = np.shape(fullset[0]['x'])
     shape_y = np.shape(fullset[0]['y'])
+    path_model = args['dir'] + '../model.cnn'
+    # NOTE: Automatically continue training the existing model
+    # Otherwise, starts a new model if there is no model file found.
     cnn = train_model(
       trainsetX,
       trainsetY,
@@ -112,10 +115,10 @@ def train(samples):
       shape_x, 
       shape_y[0],
       args['epoch'],
-      args['batch'])
+      args['batch'],
+      path_model if os.path.isfile(path_model) else None)
 
     # Serialise the model
-    path_model = args['dir'] + '../model.cnn'
     save_model(cnn, path_model)
 
   else:
