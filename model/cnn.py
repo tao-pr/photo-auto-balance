@@ -50,7 +50,7 @@ class CNN():
   # @param {int} number of epochs to run
   # @param {list[double]} learning rates (non-negative, non-zero)
   # @param {str} path to save model
-  def train(self,X,y,X_,y_,batch_size=100,num_epochs=100,learn_rate=[0.01,0.05,0.2,0.05],model_path='model.cnn'):
+  def train(self,X,y,X_,y_,batch_size=100,num_epochs=100,learn_rate=[0.02,0.05,0.5,0.02],model_path='model.cnn'):
 
     # Symbolic I/O of the networks
     inputx  = [n.input_var for n in self.input_layers]
@@ -64,7 +64,7 @@ class CNN():
 
     # Minimising RMSE with Adagradient
     print(colored('...Preparing measurement functions','green'))
-    loss   = [T.mean((output[i] - outputy[i])**2) for i in range(len(self.nets))]
+    loss   = [T.sqrt(T.mean((output[i] - outputy[i])**2)) for i in range(len(self.nets))]
     params = [layers.get_all_params(n) for n in self.nets]
     update = [adagrad(loss[i], params[i], learn_rate[i]) for i in range(len(self.nets))]
 

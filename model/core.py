@@ -20,12 +20,17 @@ Train the CNN model with the given dataset
 @param {int} dimension of output vector
 @param {int} number of epochs
 @param {int} batch size
+@param {String} path to the existing saved model
 """
-def train_model(X, y, X_, y_, image_dim, final_vec_dim, epoch, batch_size):
+def train_model(X, y, X_, y_, image_dim, final_vec_dim, epoch, batch_size, path=None):
 
   # Create a new CNN
-  print(colored('Creating a new CNN.','green'))
-  cnn = CNN(image_dim,final_vec_dim)
+  if path is None:
+    print(colored('Creating a new CNN.','green'))
+    cnn = CNN(image_dim,final_vec_dim) 
+  else:
+    print(colored('Loading model from : {0}'.format(path),'green'))
+    cnn = load_model(path)
   
   # Train the network
   print(colored('Training started.','green'))
