@@ -108,10 +108,10 @@ class CNN():
 
             # Measure training loss (RMSE)
             _output  = gen_output[i](_x)
-            _loss    = np.mean((_output[i] - _y)**2)
+            _loss    = np.sqrt(np.mean((_output[i] - _y)**2))
             # Measure validation loss (RMSE)
             _outputv = gen_output[i](X_)
-            _lossv   = np.mean((_outputv[i] - y_[:, i].reshape(-1,1))**2)
+            _lossv   = np.sqrt(np.mean((_outputv[i] - y_[:, i].reshape(-1,1))**2))
 
             ll.append(_loss)
             llv.append(_lossv)
