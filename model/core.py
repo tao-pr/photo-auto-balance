@@ -12,7 +12,7 @@ from lasagne.objectives import *
 
 """
 Train the CNN model with the given dataset
-@param {String} path to the existing saved model (if any)
+@param {String/None} path to the existing saved model (if any)
 @param {X-trainset}
 @param {y-trainset}
 @param {X-validation}
@@ -22,7 +22,7 @@ Train the CNN model with the given dataset
 @param {int} number of epochs
 @param {int} batch size
 """
-def train_model(path=None, X, y, X_, y_, image_dim, final_vec_dim, epoch, batch_size):
+def train_model(path, X, y, X_, y_, image_dim, final_vec_dim, epoch, batch_size):
 
   # Create a new CNN
   if path is None:

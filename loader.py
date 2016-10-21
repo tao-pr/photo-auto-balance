@@ -108,7 +108,7 @@ def train(samples):
     # NOTE: Automatically continue training the existing model
     # Otherwise, starts a new model if there is no model file found.
     cnn = train_model(
-      path_model if os.path.isfile(path_model) else None
+      path_model if os.path.isfile(path_model) else None,
       trainsetX,
       trainsetY,
       validsetX,
