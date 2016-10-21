@@ -21,10 +21,14 @@ from . import *
 
 class CNN():
 
+  def __init__(self,*args):
+    if len(args)>0:
+      self.new(*args)
+
   """
   @param {int} dimension of feature vector
   """
-  def __init__(self, image_dim, final_vec_dim):
+  def new(self, image_dim, final_vec_dim):
     input_dim  = (None,) + image_dim
 
     # Create initial nets, one per final vector element
@@ -167,9 +171,12 @@ class CNN():
 
   @staticmethod
   def load(path):
+    # Initialise an empty model, and bind the variables
+    cnn = CNN()
     with open(path, 'rb') as f:
       print(colored('Loading the model at {}'.format(path),'green'))
-      return pickle.load(f)
+      cnn.nets, cnn.input_layers = pickle.load(f)
+      return cnn
 
 
 
