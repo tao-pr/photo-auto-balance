@@ -12,7 +12,7 @@ import numpy as np
 import lasagne
 import _pickle as pickle
 from lasagne import layers
-from lasagne.updates import adagrad
+from lasagne.updates import adagrad, adadelta
 from lasagne.objectives import *
 from nolearn.lasagne import NeuralNet
 from nolearn.lasagne import visualize
@@ -54,7 +54,7 @@ class CNN():
   # @param {int} number of epochs to run
   # @param {list[double]} learning rates (non-negative, non-zero)
   # @param {str} path to save model
-  def train(self,X,y,X_,y_,batch_size=1000,num_epochs=100,learn_rate=[0.001,0.001,0.001,0.001],model_path='model.cnn'):
+  def train(self,X,y,X_,y_,batch_size=1000,num_epochs=100,learn_rate=[1e-4,1e-4,1e-4,1e-4],model_path='model.cnn'):
 
     # Symbolic I/O of the networks
     inputx  = [n.input_var for n in self.input_layers]
@@ -66,11 +66,11 @@ class CNN():
     print('... X_ : ', X_.shape)
     print('... y_ : ', y_.shape)
 
-    # Minimising RMSE with Adagradient
+    # Minimising RMSE with Adadelta
     print(colored('...Preparing measurement functions','green'))
     loss   = [T.sqrt(T.mean((output[i] - outputy[i])**2)) for i in range(len(self.nets))]
     params = [layers.get_all_params(n) for n in self.nets]
-    update = [adagrad(loss[i], params[i], learn_rate[i]) for i in range(len(self.nets))]
+    update = [adadelta(loss[i], params[i]) for i in range(len(self.nets))]
 
     print(colored('...Preparing training functions','green'))
     train  = [theano.function(
@@ -132,8 +132,8 @@ class CNN():
         losses_train = np.mean(losses_train, axis=0).tolist()
         losses_val   = np.mean(losses_val, axis=0).tolist()
 
-        losses_train = ['{0:.4f}'.format(d) for d in losses_train]
-        losses_val   = ['{0:.4f}'.format(d) for d in losses_val]
+        losses_train = ['{0:.6f}'.format(d) for d in losses_train]
+        losses_val   = ['{0:.6f}'.format(d) for d in losses_val]
 
         print('...Training Loss   : ', ','.join(losses_train))
         print('...Validation Loss : ', ','.join(losses_val))
@@ -158,8 +158,11 @@ class CNN():
         tcsv.write('V:' + ','.join(losses_val) + '\n')
 
   def predict(self,candidates):
-    # TAOTODO: Re-implement
+    inputx     = [n.input_var for n in self.input_layers]
+    output     = [layers.get_output(n) for n in self.nets] # Actual output
     gen_output = theano.function([inputx], output)
+    for c in candidates:
+      yield gen_output(c)
 
   def save(self,path):
     model = [self.nets,
