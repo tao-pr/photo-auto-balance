@@ -54,7 +54,7 @@ class CNN():
   # @param {int} number of epochs to run
   # @param {list[double]} learning rates (non-negative, non-zero)
   # @param {str} path to save model
-  def train(self,X,y,X_,y_,batch_size=100,num_epochs=100,learn_rate=[0.001,0.001,0.001,0.001],model_path='model.cnn'):
+  def train(self,X,y,X_,y_,batch_size=1000,num_epochs=100,learn_rate=[0.001,0.001,0.001,0.001],model_path='model.cnn'):
 
     # Symbolic I/O of the networks
     inputx  = [n.input_var for n in self.input_layers]
@@ -148,8 +148,8 @@ class CNN():
         X = X[rd]
         y = y[rd]
 
-        # Save the model every 10 epochs
-        if epoch % 10 == 0 and epoch>0:
+        # Save the model every 5 epochs
+        if epoch % 5 == 0 and epoch>0:
           self.save(model_path)
 
         # Save losses
