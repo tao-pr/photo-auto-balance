@@ -5,6 +5,10 @@ automate image color/level adjustment.
 
 ---
 
+![CHART](http://starcolon.com/IMG/ARTWORK/convnet02.png)
+
+---
+
 ## Quick Start
 
 Install all prerequisites with the following command.
