@@ -163,12 +163,17 @@ class CNN():
         tcsv.write('V:' + ','.join(losses_val) + '\n')
 
   def predict(self,candidates):
-    print(colored('Predicting {} samples...'.format(len(candidates))),'green')
+    print(colored('Predicting {} samples...'.format(len(candidates)), 'green'))
     inputx     = [n.input_var for n in self.input_layers]
     output     = [layers.get_output(n) for n in self.nets] # Actual output
     gen_output = [theano.function([inputx[i]], output[i]) for i in range(len(self.nets))]
     vs = [gen_output[i](candidates) for i in range(len(self.nets))]
-    return vs
+    vs = np.transpose(vs)
+
+    # TAODEBUG: 
+    print(vs[0])
+
+    return vs[0]
 
   # NOTE: 
   # Sample of [save] / [load] of Lasagne CNN model

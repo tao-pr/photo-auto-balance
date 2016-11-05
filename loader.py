@@ -129,9 +129,10 @@ def enhance(samples):
   # Load the samples, convert them to feature vectors
   print(colored('Loading samples...','green'))
 
-  X = []
-  for s in samples:
+  X,S = [],[]
+  for s in samples[:args['limit']]:
     s_ = load_img(args['dir'] + '/' + s)
+    S.append(s_)
     X.append(img_to_feature(s_))
 
   print(np.shape(X))
@@ -147,7 +148,7 @@ def enhance(samples):
 
   # Generate outputs 
   print(colored('Generating outputs...','magenta'))
-  for s,u,v in zip(samples,X,V):
+  for s,u,v in zip(samples,S,V):
     path_out = args['dir'] + '/../unfiltered/' + s
     print('...Processing : {0}'.format(colored(s,'cyan')))
     out = apply_filter(v)(u)
