@@ -108,7 +108,7 @@ def train(samples):
     # NOTE: Automatically continue training the existing model
     # Otherwise, starts a new model if there is no model file found.
     cnn = train_model(
-      path_model if os.path.isfile(path_model) else None,
+      path_model if os.path.isfile(path_model + '0') else None,
       trainsetX,
       trainsetY,
       validsetX,
@@ -135,7 +135,7 @@ def enhance(samples):
 
   # Load the model
   path_model = args['dir'] + '/../model.cnn'
-  model = load_model(path_model)
+  model = load_model(path_model, 4)
 
   # Generate transformation vectors for those samples
   V = model.predict(X)
