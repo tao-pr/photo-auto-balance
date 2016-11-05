@@ -108,7 +108,7 @@ def train(samples):
     # NOTE: Automatically continue training the existing model
     # Otherwise, starts a new model if there is no model file found.
     cnn = train_model(
-      path_model if os.path.isfile(path_model + '0') else None,
+      path_model if os.path.isfile(path_model + '0.npz') else None,
       trainsetX,
       trainsetY,
       validsetX,
@@ -128,14 +128,17 @@ def train(samples):
 def enhance(samples):
   # Load the samples, convert them to feature vectors
   print(colored('Loading samples...','green'))
-  S = [load_img(args['dir'] + '/' + s) for s in samples]
-  X = [img_to_feature(s) for s in S]
+
+  X = []
+  for s in samples:
+    s_ = load_img(args['dir'] + '/' + s)
+    X.append(img_to_feature(s_))
 
   print(np.shape(X))
 
   # Load the model
-  path_model = args['dir'] + '/../model.cnn'
-  model = load_model(path_model, 4)
+  path_model = args['dir'] + '/../../model.cnn'
+  model = load_model(path_model, np.shape(X[0]), 4) # TAOTOREVIEW: Find vector y size programmatically
 
   # Generate transformation vectors for those samples
   V = model.predict(X)
@@ -144,7 +147,7 @@ def enhance(samples):
 
   # Generate outputs 
   print(colored('Generating outputs...','magenta'))
-  for s,u,v in zip(samples,S,V):
+  for s,u,v in zip(samples,X,V):
     path_out = args['dir'] + '/../unfiltered/' + s
     print('...Processing : {0}'.format(colored(s,'cyan')))
     out = apply_filter(v)(u)

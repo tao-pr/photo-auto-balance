@@ -24,11 +24,16 @@ class CNN():
   def __init__(self,*args):
     if len(args)>0:
       self.new(*args)
+    else:
+      print('...Creating unstructured CNN')
+      self.nets = []
+      self.input_layers = []
 
   """
   @param {int} dimension of feature vector
   """
   def new(self, image_dim, final_vec_dim):
+
     input_dim  = (None,) + image_dim
 
     # Create initial nets, one per final vector element
@@ -158,11 +163,12 @@ class CNN():
         tcsv.write('V:' + ','.join(losses_val) + '\n')
 
   def predict(self,candidates):
+    print(colored('Predicting {} samples...'.format(len(candidates))),'green')
     inputx     = [n.input_var for n in self.input_layers]
     output     = [layers.get_output(n) for n in self.nets] # Actual output
-    gen_output = theano.function([inputx], output)
-    for c in candidates:
-      yield gen_output(c)
+    gen_output = [theano.function([inputx[i]], output[i]) for i in range(len(self.nets))]
+    vs = [gen_output[i](candidates) for i in range(len(self.nets))]
+    return vs
 
   # NOTE: 
   # Sample of [save] / [load] of Lasagne CNN model
@@ -179,37 +185,16 @@ class CNN():
     print('...Done')
 
   @staticmethod
-  def load(path,n):
+  def load(path, image_dim, final_vec_dim):
     # Create N separate empty CNN model,
     # and load parameters for each of them
-    cnn = CNN()
+    cnn = CNN(image_dim, final_vec_dim)
     print(colored('Loading the models at {}'.format(path), 'green'))
-    for i in range(n):
-      print('...Loading {}'.format(path + str(i)))
-      with np.load(path + str(i)) as f:
+    for i in range(final_vec_dim):
+      print('...Loading {}'.format(path + str(i) +'.npz'))
+      with np.load(path + str(i) + '.npz') as f:
         param_values = [f['arr_{}'.format(i)] for i in range(len(f.files))]
-      lasagne.layers.set_all_param_values(self.nets[i], param_values)
+      lasagne.layers.set_all_param_values(cnn.nets[i], param_values)
 
     return cnn
-
-  # TAODEBUG: To be deprecated
-  def __save(self,path):
-    model = [self.nets,
-             self.input_layers]
-    with open(path, 'wb') as f:
-      print(colored('Saving the model at {}'.format(path),'green'))
-      pickle.dump(model, f, -1)
-      print('...Done!')
-
-  @staticmethod
-  def __load(path):
-    # Initialise an empty model, and bind the variables
-    cnn = CNN()
-    with open(path, 'rb') as f:
-      print(colored('Loading the model at {}'.format(path),'green'))
-      cnn.nets, cnn.input_layers = pickle.load(f)
-      return cnn
-
-
-
 

@@ -27,10 +27,10 @@ def train_model(path, X, y, X_, y_, image_dim, final_vec_dim, epoch, batch_size)
   # Create a new CNN
   if path is None:
     print(colored('Creating a new CNN.','green'))
-    cnn = CNN(image_dim,final_vec_dim) 
+    cnn = CNN(image_dim, final_vec_dim) 
   else:
     print(colored('Loading model from : {0}'.format(path),'green'))
-    cnn = load_model(path, 4)
+    cnn = load_model(path, image_dim, final_vec_dim)
   
   # Train the network
   print(colored('Training started.','green'))
@@ -47,8 +47,8 @@ def train_model(path, X, y, X_, y_, image_dim, final_vec_dim, epoch, batch_size)
 def save_model(cnn,path):
   cnn.save(path)
 
-def load_model(path, n_outputs):
-  return CNN.load(path, n_outputs)
+def load_model(path, image_dim, final_vec_dim):
+  return CNN.load(path, image_dim, final_vec_dim)
 
 def generate_output(cnn,candidate):
   return cnn.predict(candidate)
