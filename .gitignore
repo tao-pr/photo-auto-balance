@@ -1,6 +1,10 @@
 data
 model/__pycache__/
 vision/__pycache__/
+log.txt
+loss.csv
+model.cnn*
+outputs/
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
