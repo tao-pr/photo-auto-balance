@@ -164,7 +164,36 @@ class CNN():
     for c in candidates:
       yield gen_output(c)
 
-  def save(self,path):
+  # NOTE: 
+  # Sample of [save] / [load] of Lasagne CNN model
+  # can be found at: 
+  # https://github.com/Lasagne/Lasagne/blob/master/examples/mnist.py
+
+  def save(self, path):
+    print(colored('Saving the models at {}'.format(path),'green'))
+    i = 0
+    for net in self.nets:
+      print('...Saving {}'.format(path + str(i)))
+      np.savez(path + str(i), *lasagne.layers.get_all_param_values(self.nets[i]))
+      i += 1
+    print('...Done')
+
+  @staticmethod
+  def load(path,n):
+    # Create N separate empty CNN model,
+    # and load parameters for each of them
+    cnn = CNN()
+    print(colored('Loading the models at {}'.format(path), 'green'))
+    for i in range(n):
+      print('...Loading {}'.format(path + str(i)))
+      with np.load(path + str(i)) as f:
+        param_values = [f['arr_{}'.format(i)] for i in range(len(f.files))]
+      lasagne.layers.set_all_param_values(self.nets[i], param_values)
+
+    return cnn
+
+  # TAODEBUG: To be deprecated
+  def __save(self,path):
     model = [self.nets,
              self.input_layers]
     with open(path, 'wb') as f:
@@ -173,7 +202,7 @@ class CNN():
       print('...Done!')
 
   @staticmethod
-  def load(path):
+  def __load(path):
     # Initialise an empty model, and bind the variables
     cnn = CNN()
     with open(path, 'rb') as f:
