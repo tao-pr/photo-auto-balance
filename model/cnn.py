@@ -154,7 +154,7 @@ class CNN():
         y = y[rd]
 
         # Save the model every 5 epochs (+ first epoch)
-        if epoch % 5 == 0 or epoch>0:
+        if epoch % 5 == 0 or epoch==0:
           self.save(model_path)
 
         # Save losses
