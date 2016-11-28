@@ -198,7 +198,7 @@ class CNN():
     for i in range(final_vec_dim):
       print('...Loading {}'.format(path + str(i) +'.npz'))
       with np.load(path + str(i) + '.npz') as f:
-        param_values = [f['arr_{}'.format(i)] for i in range(len(f.files))]
+        param_values = [f['arr_{0}'.format(i)] for i in range(len(f.files))]
       lasagne.layers.set_all_param_values(cnn.nets[i], param_values)
 
     return cnn
