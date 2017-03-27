@@ -10,7 +10,7 @@ from theano import tensor as T
 from scipy import *
 import numpy as np
 import lasagne
-import _pickle as pickle
+import pickle
 from lasagne import layers
 from lasagne.updates import adagrad, adadelta
 from lasagne.objectives import *
@@ -180,26 +180,46 @@ class CNN():
   # can be found at: 
   # https://github.com/Lasagne/Lasagne/blob/master/examples/mnist.py
 
+  # def save(self, path):
+  #   print(colored('Saving the models at {}'.format(path),'green'))
+  #   i = 0
+  #   for net in self.nets:
+  #     print('...Saving {}'.format(path + str(i)))
+  #     np.savez(path + str(i), *lasagne.layers.get_all_param_values(self.nets[i]))
+  #     i += 1
+  #   print('...Done')
   def save(self, path):
     print(colored('Saving the models at {}'.format(path),'green'))
-    i = 0
-    for net in self.nets:
+    for i, net in enumerate(self.nets):
       print('...Saving {}'.format(path + str(i)))
-      np.savez(path + str(i), *lasagne.layers.get_all_param_values(self.nets[i]))
-      i += 1
-    print('...Done')
+      params = lasagne.layers.get_all_param_values(net)
+      pickle.dump(params, open(path + str(i), 'wb'), pickle.HIGHEST_PROTOCOL))
+      print('...[done]')
+    print('[All saved]')
+
+  # @staticmethod
+  # def load(path, image_dim, final_vec_dim):
+  #   # Create N separate empty CNN model,
+  #   # and load parameters for each of them
+  #   cnn = CNN(image_dim, final_vec_dim)
+  #   print(colored('Loading the models at {}'.format(path), 'green'))
+  #   for i in range(final_vec_dim):
+  #     print('...Loading {}'.format(path + str(i) +'.npz'))
+  #     with np.load(path + str(i) + '.npz') as f:
+  #       param_values = [f['arr_{0}'.format(i)] for i in range(len(f.files))]
+  #     lasagne.layers.set_all_param_values(cnn.nets[i], param_values)
+
+  #   return cnn
 
   @staticmethod
   def load(path, image_dim, final_vec_dim):
-    # Create N separate empty CNN model,
-    # and load parameters for each of them
+    # Create N empty models
     cnn = CNN(image_dim, final_vec_dim)
     print(colored('Loading the models at {}'.format(path), 'green'))
     for i in range(final_vec_dim):
-      print('...Loading {}'.format(path + str(i) +'.npz'))
-      with np.load(path + str(i) + '.npz') as f:
-        param_values = [f['arr_{0}'.format(i)] for i in range(len(f.files))]
-      lasagne.layers.set_all_param_values(cnn.nets[i], param_values)
-
+      print('...Loading part #{}'.format(i))
+      params = pickle.load(open(path + str(i), 'rb')) 
+      lasagne.layers.set_all_param_values(cnn.nets[i], params) # TAOTODO: Reference net id
+      print('...[done]')
+    print('[All loaded]')
     return cnn
-
