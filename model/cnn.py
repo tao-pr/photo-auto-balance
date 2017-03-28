@@ -188,12 +188,13 @@ class CNN():
   #     np.savez(path + str(i), *lasagne.layers.get_all_param_values(self.nets[i]))
   #     i += 1
   #   print('...Done')
+
   def save(self, path):
     print(colored('Saving the models at {}'.format(path),'green'))
     for i, net in enumerate(self.nets):
       print('...Saving {}'.format(path + str(i)))
       params = lasagne.layers.get_all_param_values(net)
-      pickle.dump(params, open(path + str(i), 'wb'), pickle.HIGHEST_PROTOCOL))
+      pickle.dump(params, open(path + str(i), 'wb'), pickle.HIGHEST_PROTOCOL)
       print('...[done]')
     print('[All saved]')
 
