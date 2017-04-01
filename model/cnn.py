@@ -41,11 +41,14 @@ class CNN():
     self.input_layers = []
     for i in range(final_vec_dim):
       l_input = layers.InputLayer(shape=input_dim)
-      l_conv1 = layers.Conv2DLayer(l_input, 32, (5,5))
+      l_conv0 = layers.Conv2DLayer(l_input, 64, (5,5))
+      l_pool0 = layers.MaxPool2DLayer(l_conv0, (5,5), stride=2)
+      l_conv1 = layers.Conv2DLayer(l_pool0, 32, (5,5))
       l_conv2 = layers.Conv2DLayer(l_conv1, 32, (3,3))
       l_pool  = layers.MaxPool2DLayer(l_conv2, (5,5), stride=2)
-      l_1d1   = layers.DenseLayer(l_pool, 64)
-      l_1d2   = layers.DenseLayer(l_1d1, 1)
+      l_1d1   = layers.DenseLayer(l_pool, 24)
+      l_1d2   = layers.DenseLayer(l_ld1, 8)
+      l_1d3   = layers.DenseLayer(l_1d2, 1)
 
       self.nets.append(l_1d2)
       self.input_layers.append(l_input)
