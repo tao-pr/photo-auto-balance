@@ -42,15 +42,16 @@ class CNN():
     for i in range(final_vec_dim):
       l_input = layers.InputLayer(shape=input_dim)
       l_conv0 = layers.Conv2DLayer(l_input, 64, (5,5))
-      l_pool0 = layers.MaxPool2DLayer(l_conv0, (5,5), stride=2)
-      l_conv1 = layers.Conv2DLayer(l_pool0, 32, (5,5))
+      l_max0  = layers.MaxPool2DLayer(l_conv0, (5,5), stride=3)
+      l_conv1 = layers.Conv2DLayer(l_max0, 32, (5,5))
+      l_max1  = layers.MaxPool2DLayer(l_conv1, (5,5), stride=2)
       l_conv2 = layers.Conv2DLayer(l_conv1, 32, (3,3))
-      l_pool  = layers.MaxPool2DLayer(l_conv2, (5,5), stride=2)
+      l_pool  = layers.MaxPool2DLayer(l_conv2, (5,5), stride=1)
       l_1d1   = layers.DenseLayer(l_pool, 24)
       l_1d2   = layers.DenseLayer(l_1d1, 8)
       l_1d3   = layers.DenseLayer(l_1d2, 1)
 
-      self.nets.append(l_1d2)
+      self.nets.append(l_1d3)
       self.input_layers.append(l_input)
 
   # Train the neural net
@@ -81,7 +82,7 @@ class CNN():
     update = [adadelta(loss[i], params[i]) for i in range(len(self.nets))]
 
     print(colored('...Preparing training functions','green'))
-    train  = [theano.function(
+    models  = [theano.function(
       [inputx[i], outputy[i]],
       loss[i], 
       updates=update[i]
@@ -107,12 +108,12 @@ class CNN():
           ll, llv = [],[]
           
           # Train each model separately with the same samples
-          for i in range(len(train)):
+          for i in range(len(models)):
             print('......(model #{0})'.format(i))
             _x = X[b0:bN]
             _y = y[b0:bN, i].reshape(-1,1)
 
-            train[i](_x, _y)
+            models[i](_x, _y)
 
             # Measure training loss (RMSE)
             _output  = gen_output[i](_x)
