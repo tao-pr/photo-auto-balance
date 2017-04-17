@@ -46,7 +46,7 @@ class CNN():
       l_conv1 = layers.Conv2DLayer(l_max0, 32, (5,5))
       l_max1  = layers.MaxPool2DLayer(l_conv1, (5,5), stride=2)
       l_conv2 = layers.Conv2DLayer(l_conv1, 32, (3,3))
-      l_pool  = layers.MaxPool2DLayer(l_conv2, (5,5), stride=1)
+      l_pool  = layers.MaxPool2DLayer(l_conv2, (3,3), stride=1)
       l_1d1   = layers.DenseLayer(l_pool, 24)
       l_1d2   = layers.DenseLayer(l_1d1, 8)
       l_1d3   = layers.DenseLayer(l_1d2, 1)
