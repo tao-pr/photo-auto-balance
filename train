@@ -2,12 +2,14 @@
 
 # Run the CNN training
 
-MAX=70
 RATIO=0.9
+LIMIT=1675
+BATCH=1000
+EPOCH=100
 
 rm data/out/*
 rm data/unfiltered/*
 
-python3 loader.py --train --ratio $RATIO
+python3 loader.py --train --limit $LIMIT --ratio $RATIO --batch $BATCH --epoch $EPOCH
 
 echo "======== FINISHED ========"
