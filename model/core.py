@@ -37,11 +37,6 @@ def train_model(path, X, y, X_, y_, image_dim, final_vec_dim, epoch, batch_size)
   cnn.train(X, y, X_, y_, batch_size, epoch)
   print(colored('Training finished.','green'))
 
-  print('===============================================')
-  print(' RMS Error measured on trainset:       {0:.2f}'.format(rmse))
-  print(' RMS Error measured on validation set: {0:.2f}'.format(rmse_))
-  print('===============================================')
-
   return cnn
 
 def save_model(cnn,path):
