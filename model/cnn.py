@@ -63,7 +63,7 @@ class CNN():
   # @param {int} number of epochs to run
   # @param {list[double]} learning rates (non-negative, non-zero)
   # @param {str} path to save model
-  def train(self,X,y,X_,y_,batch_size=1000,num_epochs=100,learn_rate=[1e-4,1e-4,1e-4,1e-4],model_path='model.cnn'):
+  def train(self,X,y,X_,y_,batch_size=1000,num_epochs=100,learn_rate=[0.01,0.01,0.01,0.01],model_path='model.cnn'):
 
     # Symbolic I/O of the networks
     inputx  = [n.input_var for n in self.input_layers]
