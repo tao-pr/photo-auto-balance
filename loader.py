@@ -29,7 +29,7 @@ arguments.add_argument('--dir', type=str, default='./data/raw/') # Where to pick
 arguments.add_argument('--train', dest='train', action='store_true') # Training mode
 arguments.add_argument('--ratio', type=float, default=0.8) # Ratio of the training set for cross validation
 arguments.add_argument('--batch', type=int, default=100) # Batch size
-arguments.add_argument('--permutation', type=int, default=8) # Number of filters to apply
+arguments.add_argument('--permutation', type=int, default=5) # Number of filters to apply
 arguments.add_argument('--epoch', type=int, default=100) # Number of epochs to train
 
 # Enhancement arguments
