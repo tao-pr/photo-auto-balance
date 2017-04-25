@@ -16,6 +16,8 @@ mkdir -p data/raw
 mkdir -p data/out
 mkdir -p data/unfiltered
 sudo pip3 install -r requirements.txt 
+# Matplotlib is externally required by Lasagne
+pip3 install matplotlib
 pip3 install https://github.com/Lasagne/Lasagne/archive/master.zip
 cd data/raw/
 wget http://starcolon.com/data/dataset.tar.gz
