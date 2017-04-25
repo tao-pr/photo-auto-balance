@@ -25,8 +25,8 @@ Train the CNN model with the given dataset
 def train_model(path, X, y, X_, y_, image_dim, final_vec_dim, epoch, batch_size):
 
   # Create a new CNN
-  if path is None:
-    print(colored('Creating a new CNN.','green'))
+  if path is None or not os.path.isfile(path + '0'):
+    print(colored('Creating a new CNN.','cyan'))
     cnn = CNN(image_dim, final_vec_dim) 
   else:
     print(colored('Loading model from : {0}'.format(path),'green'))

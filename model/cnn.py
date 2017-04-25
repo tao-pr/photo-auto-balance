@@ -12,7 +12,7 @@ import numpy as np
 import lasagne
 import pickle
 from lasagne import layers
-from lasagne.updates import adagrad, adadelta
+from lasagne.updates import adagrad, adadelta, apply_momentum
 from lasagne.objectives import *
 from nolearn.lasagne import NeuralNet
 from nolearn.lasagne import visualize
@@ -80,6 +80,7 @@ class CNN():
     loss   = [T.sqrt(T.mean((output[i] - outputy[i])**2)) for i in range(len(self.nets))]
     params = [layers.get_all_params(n) for n in self.nets]
     update = [adadelta(loss[i], params[i]) for i in range(len(self.nets))]
+    update = [apply_momentum(update[i], params[i], momentum=0.8) for i in range(len(self.nets))]
 
     print(colored('...Preparing training functions','green'))
     models  = [theano.function(

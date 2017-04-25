@@ -17,7 +17,7 @@ mkdir -p data/out
 mkdir -p data/unfiltered
 sudo pip3 install -r requirements.txt 
 cd data/
-wget http://starcolon.com/data/train.tar.gz
+wget http://starcolon.com/data/dataset.tar.gz
 tar -xvf train.tar.gz 
 rm raw/._*
 rm train.tar.gz
