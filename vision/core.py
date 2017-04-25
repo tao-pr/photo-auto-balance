@@ -9,7 +9,7 @@ from PIL import Image
 from .filters import *
 
 def get_sample_dim(): # n
-  return 320 # total vector dimensionality : n^2 * 3
+  return 240 # total vector dimensionality : n^2 * 3
 
 def generate_filtered(sample,max_combination=5):
   # Make transformation functions
