@@ -2,9 +2,9 @@
 
 # Run the CNN training
 
-RATIO=0.9
-LIMIT=1675
-BATCH=1000
+RATIO=0.8
+LIMIT=800
+BATCH=400
 EPOCH=100
 
 rm data/out/*
