@@ -16,12 +16,12 @@ mkdir -p data/raw
 mkdir -p data/out
 mkdir -p data/unfiltered
 sudo pip3 install -r requirements.txt 
-cd data/
+cd data/raw/
 wget http://starcolon.com/data/dataset.tar.gz
-tar -xvf train.tar.gz 
-rm raw/._*
-rm train.tar.gz
-cd ..
+tar -xvf dataset.tar.gz 
+rm ._*
+rm dataset.tar.gz
+cd ../..
 
 echo "[All set!]"
 echo "Ctrl + C and run the following command to train:"
